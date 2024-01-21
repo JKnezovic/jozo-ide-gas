@@ -4,6 +4,13 @@
   box-sizing: border-box;
   font-family: "Reem Kufi", sans-serif !important;
 }
+#map { height: 80vh; }
+
+.leaflet-container{
+  width: 100%;
+  height: 100%;
+}
+
 img {
   max-width: 100%;
   height: auto;
@@ -76,7 +83,7 @@ nav {
   align-items: flex-start;
 }
 .primary-heading {
-  font-size: clamp(2rem, 3.5vw, 4rem);
+  font-size: clamp(1rem, 2.5vw, 3rem);
   color: #4c4c4c;
   font-weight: bold;
   /* line-height: 5rem; */
@@ -105,6 +112,58 @@ nav {
   text-decoration: none;
 }
 .secondary-button:hover {
+  background-color: #e48f0f;
+}
+
+.trip-text-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding-left: 1rem;
+}
+
+.label-value-container{
+
+}
+.trip-details{
+  margin-top: 2rem;
+  display: flex;
+}
+.column{
+    flex: 1;
+    margin-right: 40px; /* Adjust as needed */
+}
+.label{
+  font-size: clamp(0.7rem, 1vw, 1.5rem);
+  color: #797979;
+  margin-bottom: 0;
+}
+.value{
+  font-size: clamp(1rem, 2vw, 3rem);
+  color: #4c4c4c;
+  font-weight: bold;
+}
+
+.bottom-right-button {
+  position: absolute;
+  bottom: 10px; /* Adjust as needed */
+  right: 7%; /* Adjust as needed */
+  padding: 1rem 2.5rem;
+  background-color: #ffc40d;
+  outline: none;
+  border: none;
+  border-radius: 5rem;
+  font-size: 1.1rem;
+  cursor: pointer;
+  font-weight: 600;
+  color: black;
+  transition: 0.2s;
+  text-decoration: none;
+  /* Add other styles for the button if needed */
+}
+
+.bottom-right-button:hover {
   background-color: #e48f0f;
 }
 
