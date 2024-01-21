@@ -23,4 +23,5 @@ public class TripData {
     @DocumentReference
     private List<Ride> rideIds;
     private String status;
+    private String gpxPath;
 }
