@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Map;
 
@@ -14,7 +15,9 @@ public class RideController {
     private RideService rideService;
 
     @PostMapping
-    public ResponseEntity<Ride> createTrip(@RequestBody Map<String,String> payload){
-        return new ResponseEntity<Ride>(rideService.createRide(payload.get("routeName"),payload.get("tripId")), HttpStatus.CREATED);
+    public ResponseEntity<Ride> createTrip(@RequestParam("file") MultipartFile file,
+                                           @RequestParam("routeName") String routeName,
+                                           @RequestParam("tripId") String tripId){
+        return new ResponseEntity<Ride>(rideService.createRide(routeName,tripId,file), HttpStatus.CREATED);
     }
 }

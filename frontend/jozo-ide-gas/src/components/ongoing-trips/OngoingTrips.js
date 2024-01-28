@@ -2,19 +2,20 @@ import React from "react";
 import Map from "../maps/Map";
 import api from "../../api/axiosConfig";
 import { useEffect, useState } from "react";
-import LabelValue from "../label_value/LabelValue";
-import { Link } from "react-router-dom";
+import Timeline from "../timeline/Timeline";
 
 const OngoingTrips = () => {
   const [tripData, setTripData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selectedRide, setSelectedRide] = useState([]);
 
   const getTrip = async () => {
     try {
       const response = await api.get("/api/v1/trips/ongoing");
-      console.log(response.data);
       setTripData(response.data);
       setLoading(false);
+      const rides = response.data.tripDataList[0].rideIds;
+      setSelectedRide(rides[rides.length - 1]);
     } catch (err) {
       console.log(err);
       setLoading(false);
@@ -29,25 +30,16 @@ const OngoingTrips = () => {
         <p>Loading...</p>
       ) : (
         <>
-          <Map tripData={tripData} />
-          <div className="trip-text-section">
-            <h1 className="primary-heading">Stobreč - Nordkapp</h1>
-            <div className="trip-details">
-              <div className="column">
-                <LabelValue label={"Ukupno Kilometara"} value={"4285km"} />
-                <LabelValue label={"Pređeno"} value={"1240km"} />
-                <LabelValue label={"Do kraja"} value={"3045km"} />
-              </div>
-              <div className="column">
-                <LabelValue label={"Datum početka"} value={"1.5.2024."} />
-                <LabelValue label={"Dana na putu"} value={5} />
-                <LabelValue label={"KM po danu"} value={"90km"} />
-              </div>
-            </div>
-            <Link to="/ongoing" className="bottom-right-button">
-              Detalji{" "}
-            </Link>
-          </div>
+          <Map
+            tripData={tripData}
+            selectedRide={selectedRide}
+            setSelectedRide={setSelectedRide}
+          />
+          <Timeline
+            rides={tripData.tripDataList[0].rideIds}
+            selectedRide={selectedRide}
+            setSelectedRide={setSelectedRide}
+          />
         </>
       )}
     </div>
