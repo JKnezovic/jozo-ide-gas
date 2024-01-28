@@ -9,7 +9,7 @@ export default function Header() {
   return (
     <nav>
       <Link to="/" className="nav-logo-container">
-        <img src={Logo} width={60} alt="" />
+        {/*  <img src={Logo} width={50} alt="" /> */}
       </Link>
       <div className="navbar-links-container">
         <CustomLink to="/">Home</CustomLink>
