@@ -1,11 +1,24 @@
 import React, { useEffect, useRef } from "react";
-import { MapContainer, TileLayer, Polyline } from "react-leaflet";
+import {
+  MapContainer,
+  TileLayer,
+  Polyline,
+  Marker,
+  Popup,
+} from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import SetBoundsPolyLine from "./SetBoundsPolyLine";
-
+import Legend from "./Legend";
+import icon from "leaflet/dist/images/marker-icon.png";
+import iconShadow from "leaflet/dist/images/marker-shadow.png";
+import L from "leaflet";
+let DefaultIcon = L.icon({
+  iconUrl: icon,
+  shadowUrl: iconShadow,
+});
 const Map = ({ tripData, setSelectedRide, selectedRide }) => {
   const mapRef = useRef(null);
-
+  const position = [42.5, 18.5];
   useEffect(() => {
     // Calculate bounds based on GPX data
     if (mapRef.current && selectedRide) {
@@ -33,6 +46,10 @@ const Map = ({ tripData, setSelectedRide, selectedRide }) => {
             />
           </>
         )}
+        <Legend />
+        <Marker position={position} icon={DefaultIcon}>
+          <Popup>Updated at 12:45 04.02.2024.</Popup>
+        </Marker>
       </MapContainer>
     </div>
   );
