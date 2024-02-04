@@ -30,11 +30,7 @@ const OngoingTrips = () => {
         <p>Loading...</p>
       ) : (
         <>
-          <Map
-            tripData={tripData}
-            selectedRide={selectedRide}
-            setSelectedRide={setSelectedRide}
-          />
+          <Map tripData={tripData} selectedRide={selectedRide} setSelectedRide={setSelectedRide} />
           <Timeline
             rides={tripData.tripDataList[0].rideIds}
             selectedRide={selectedRide}

@@ -40,16 +40,10 @@ export default function BurgerMenu({ setOpenMenu, openMenu }) {
         <List>
           {menuOptions.map((item) => (
             <ListItem key={item.text} disablePadding>
-              <Link
-                style={{ textDecoration: "none", color: "inherit" }}
-                to={item.path}
-              >
+              <Link style={{ textDecoration: "none", color: "inherit" }} to={item.path}>
                 <ListItemButton>
                   <ListItemIcon>{item.icon}</ListItemIcon>
-                  <ListItemText
-                    style={{ textDecoration: "none" }}
-                    primary={item.text}
-                  />
+                  <ListItemText style={{ textDecoration: "none" }} primary={item.text} />
                 </ListItemButton>
               </Link>
             </ListItem>

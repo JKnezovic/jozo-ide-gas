@@ -11,11 +11,7 @@ const TripDetailHeader = ({ ride, routeName }) => {
         <p className="route-name">{routeName + " (Day " + difference + ")"}</p>
         <p className="date">{" - " + date.format("DD.MMM.YY.")}</p>
       </div>
-      <Chip
-        label={ride.length + "km"}
-        variant="outlined"
-        style={{ marginRight: "10px" }}
-      />
+      <Chip label={ride.length + "km"} variant="outlined" style={{ marginRight: "10px" }} />
     </div>
   );
 };

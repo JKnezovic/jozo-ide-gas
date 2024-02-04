@@ -12,17 +12,11 @@ const Legend = () => {
         <span className="legend-label">Latest live location</span>
       </div>
       <div className="legend-item">
-        <span
-          className="legend-color"
-          style={{ backgroundColor: "#EE6055" }}
-        ></span>
+        <span className="legend-color" style={{ backgroundColor: "#EE6055" }}></span>
         <span className="legend-label">Selected route</span>
       </div>
       <div className="legend-item">
-        <span
-          className="legend-color"
-          style={{ backgroundColor: "#6C8EAD" }}
-        ></span>
+        <span className="legend-color" style={{ backgroundColor: "#6C8EAD" }}></span>
         <span className="legend-label">Route</span>
       </div>
     </div>
