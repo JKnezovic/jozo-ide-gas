@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -20,12 +21,12 @@ public class RideService {
     private RideRepository rideRepository;
     @Autowired
     private MongoTemplate mongoTemplate;
-    public Ride createRide(String routeName, String tripId, MultipartFile file){
+    public Ride createRide(String routeName, String tripId, MultipartFile file, int length, Date date, List<String> statuses, List<Image> images){
         System.out.println("Received file: " + file.getOriginalFilename());
         String gpxString = readGpxFile(file);
         GpxData gpxData = GpxParser.parseGpx(gpxString);
         List<Trkpt> positions = gpxData.getTrackPoints();
-        Ride ride = rideRepository.insert(new Ride(routeName,tripId,positions));
+        Ride ride = rideRepository.insert(new Ride(routeName,tripId,positions,length,date, statuses, images));
 
         System.out.println("Bila vidila: ");
         mongoTemplate.update(TripData.class)

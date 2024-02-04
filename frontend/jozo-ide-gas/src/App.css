@@ -32,7 +32,7 @@ nav {
   align-items: center;
   min-height: 49px;
   background: url(../src/assets/topo-bg-5-black.png);
-  background-color: #94712d;
+  background-color: #94722e;
 }
 
 .navbar-links-container {
@@ -122,6 +122,7 @@ nav {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  height: 94vh;
 }
 
 .trip-details-container:hover {
@@ -138,11 +139,23 @@ nav {
   flex-direction: column-reverse;
   display: flex;
   height: 100%;
+  overflow: auto;
 }
 .trip-details-container {
   width: 100%;
   display: flex;
   height: 100%; /* Set the height to 100% to fill the entire parent */
+}
+
+.trip-details-header {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 5px;
+}
+
+.trip-details-body {
+  width: 100%;
 }
 
 .line-circle {
@@ -153,6 +166,16 @@ nav {
   justify-content: center;
   position: relative;
 }
+.circle {
+  position: absolute;
+  top: 13px;
+  border-radius: 50%;
+  border-color: white;
+  border-style: solid;
+  border-width: 1px;
+  min-height: 15px;
+  min-width: 15px;
+}
 
 .line-div {
   height: 100%;
@@ -161,7 +184,42 @@ nav {
   margin-right: 10px;
   margin-left: 10px;
 }
+.route-name {
+  font-size: 14px;
+  font-weight: bold;
+}
+.date {
+  color: gray;
+  font-size: small;
+  margin-top: 1px;
+  margin-left: 3px;
+}
 
+.flex {
+  display: flex;
+}
+
+.statuses {
+  width: 90%;
+}
+
+.custom-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 10px;
+  color: white;
+  z-index: 10;
+}
+.thumb {
+  object-fit: cover;
+  width: 104px;
+  height: 104px;
+  margin: 2px;
+  border-radius: 10px;
+}
 .column {
   flex: 1;
   margin-right: 40px; /* Adjust as needed */

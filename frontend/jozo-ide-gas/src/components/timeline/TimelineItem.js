@@ -1,54 +1,22 @@
 import React from "react";
-import Chip from "@mui/material/Chip";
+import TripDetailHeader from "./TripDetailHeader";
+import LineCircle from "./LineCircle";
+import Images from "./Images";
+import Statuses from "./Statuses";
 const TimelineItem = ({ routeName, handleClick, ride, selectedRide }) => {
-  const bgColor = routeName === selectedRide.routeName ? "red" : "blue";
   const shadow = routeName === selectedRide.routeName ? "active" : "";
   return (
     <div
       className={`trip-details-container ${shadow}`}
       onClick={() => handleClick(ride)}
     >
-      <div className="line-circle">
-        <div
-          style={{
-            position: "absolute",
-            top: "3px",
-            backgroundColor: bgColor,
-            borderRadius: "50%",
-            borderColor: "white",
-            borderStyle: "solid",
-            borderWidth: "1px",
-            minHeight: "15px",
-            minWidth: "15px",
-          }}
-        />
-        <div className="line-div" style={{ backgroundColor: bgColor }}></div>
-      </div>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          width: "100%",
-        }}
-      >
-        <div style={{ display: "flex" }}>
-          <p>{routeName}</p>
-          <p
-            style={{
-              color: "gray",
-              fontSize: "small",
-              marginTop: "3px",
-              marginLeft: "3px",
-            }}
-          >
-            {" - 10.Jan.2024"}
-          </p>
+      <LineCircle routeName={routeName} selectedRide={selectedRide} />
+      <div style={{ width: "100%" }}>
+        <TripDetailHeader ride={ride} routeName={routeName} />
+        <div className="trip-details-body">
+          <Statuses statuses={ride.statuses} />
+          <Images images={ride.images} />
         </div>
-        <Chip
-          label="102km"
-          variant="outlined"
-          style={{ marginRight: "10px" }}
-        />
       </div>
     </div>
   );

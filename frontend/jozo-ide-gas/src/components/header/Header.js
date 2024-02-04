@@ -1,6 +1,6 @@
 import { Link, useMatch, useResolvedPath } from "react-router-dom";
 import React, { useState } from "react";
-import Logo from "../../assets/bicycle_yellow.png";
+//import Logo from "../../assets/bicycle_yellow.png";
 import { HiOutlineBars3 } from "react-icons/hi2";
 import BurgerMenu from "./BurgerMenu";
 export default function Header() {

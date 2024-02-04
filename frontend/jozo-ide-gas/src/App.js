@@ -1,4 +1,5 @@
 import "./App.css";
+import "react-photo-view/dist/react-photo-view.css";
 import { Routes, Route } from "react-router-dom";
 import Home from "./components/home/Home";
 import Header from "./components/header/Header";

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
-import { MapContainer, TileLayer } from "react-leaflet";
+import { MapContainer, TileLayer, Polyline } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import SetBoundsPolyLine from "./MapController";
+import SetBoundsPolyLine from "./SetBoundsPolyLine";
 
 const Map = ({ tripData, setSelectedRide, selectedRide }) => {
   const mapRef = useRef(null);
@@ -22,6 +22,10 @@ const Map = ({ tripData, setSelectedRide, selectedRide }) => {
         />
         {tripData && (
           <>
+            <Polyline
+              positions={tripData.gpxData.trackPoints}
+              pathOptions={{ color: "#94722E" }}
+            />
             <SetBoundsPolyLine
               tripData={tripData}
               selectedRide={selectedRide}

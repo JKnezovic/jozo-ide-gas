@@ -1,8 +1,8 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useMap, Polyline } from "react-leaflet";
 
-const redColor = { color: "red", weight: 5 };
-const whiteColor = { color: "blue", weight: 5 };
+const redColor = { color: "#EE6055", weight: 5 };
+const blueColor = { color: "#6C8EAD", weight: 5 };
 
 const SetBoundsPolyLine = ({ tripData, selectedRide }) => {
   const [bounds, setBounds] = useState(tripData.tripDataList[0].rideIds[1]);
@@ -31,7 +31,7 @@ const SetBoundsPolyLine = ({ tripData, selectedRide }) => {
           key={index}
           positions={positions}
           eventHandlers={handlers}
-          pathOptions={bounds === positions ? redColor : whiteColor}
+          pathOptions={bounds === positions ? redColor : blueColor}
         />
       );
     });
