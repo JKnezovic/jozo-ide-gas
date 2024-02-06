@@ -12,9 +12,9 @@ const OngoingTrips = () => {
   const getTrip = async () => {
     try {
       const response = await api.get("/api/v1/trips/ongoing");
-      setTripData(response.data);
+      setTripData(response.data[0]);
       setLoading(false);
-      const rides = response.data.tripDataList[0].rideIds;
+      const rides = response.data[0].rideIds;
       setSelectedRide(rides[rides.length - 1]);
     } catch (err) {
       console.log(err);
@@ -32,7 +32,7 @@ const OngoingTrips = () => {
         <>
           <Map tripData={tripData} selectedRide={selectedRide} setSelectedRide={setSelectedRide} />
           <Timeline
-            rides={tripData.tripDataList[0].rideIds}
+            rides={tripData.rideIds}
             selectedRide={selectedRide}
             setSelectedRide={setSelectedRide}
           />

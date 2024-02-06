@@ -1,10 +1,12 @@
-import React, { useEffect, useRef } from "react";
-import { MapContainer, TileLayer, Polyline, Marker, Popup } from "react-leaflet";
+import React, { useEffect, useRef, useState } from "react";
+import api from "../../api/axiosConfig";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import SetBoundsPolyLine from "./SetBoundsPolyLine";
 import Legend from "./Legend";
 import icon from "leaflet/dist/images/marker-icon.png";
 import iconShadow from "leaflet/dist/images/marker-shadow.png";
+import Moment from "moment";
 import L from "leaflet";
 let DefaultIcon = L.icon({
   iconUrl: icon,
@@ -12,13 +14,26 @@ let DefaultIcon = L.icon({
 });
 const Map = ({ tripData, setSelectedRide, selectedRide }) => {
   const mapRef = useRef(null);
-  const position = [42.5, 18.5];
+  const [liveLoaction, setLiveLocation] = useState({ latLng: [53, 19] });
   useEffect(() => {
     // Calculate bounds based on GPX data
     if (mapRef.current && selectedRide) {
       mapRef.current.fitBounds(selectedRide.positions);
     }
   }, [selectedRide]);
+
+  useEffect(() => {
+    getLiveLocation();
+  }, []);
+
+  const getLiveLocation = async () => {
+    try {
+      const response = await api.get("/api/v1/live-location");
+      setLiveLocation(response.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <div id="map" className="home-image-section">
@@ -29,7 +44,6 @@ const Map = ({ tripData, setSelectedRide, selectedRide }) => {
         />
         {tripData && (
           <>
-            <Polyline positions={tripData.gpxData.trackPoints} pathOptions={{ color: "#94722E" }} />
             <SetBoundsPolyLine
               tripData={tripData}
               selectedRide={selectedRide}
@@ -38,8 +52,8 @@ const Map = ({ tripData, setSelectedRide, selectedRide }) => {
           </>
         )}
         <Legend />
-        <Marker position={position} icon={DefaultIcon}>
-          <Popup>Updated at 12:45 04.02.2024.</Popup>
+        <Marker position={liveLoaction.latLng} icon={DefaultIcon}>
+          <Popup>{"Updated at " + Moment(liveLoaction.updatedAt).format}</Popup>
         </Marker>
       </MapContainer>
     </div>

@@ -5,7 +5,7 @@ const redColor = { color: "#EE6055", weight: 5 };
 const blueColor = { color: "#6C8EAD", weight: 5 };
 
 const SetBoundsPolyLine = ({ tripData, selectedRide }) => {
-  const [bounds, setBounds] = useState(tripData.tripDataList[0].rideIds[1]);
+  const [bounds, setBounds] = useState(tripData.rideIds[1]);
   const map = useMap();
 
   useEffect(() => {
@@ -17,7 +17,7 @@ const SetBoundsPolyLine = ({ tripData, selectedRide }) => {
   }, [selectedRide, map]);
 
   const renderPolylines = useMemo(() => {
-    return tripData.tripDataList[0].rideIds.map((rideId, index) => {
+    return tripData.rideIds.map((rideId, index) => {
       const positions = rideId.positions;
       const handlers = {
         click() {
