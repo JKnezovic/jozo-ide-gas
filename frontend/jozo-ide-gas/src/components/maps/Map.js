@@ -11,10 +11,12 @@ import L from "leaflet";
 let DefaultIcon = L.icon({
   iconUrl: icon,
   shadowUrl: iconShadow,
+  iconAnchor: [12, 41],
 });
 const Map = ({ tripData, setSelectedRide, selectedRide }) => {
   const mapRef = useRef(null);
   const [liveLoaction, setLiveLocation] = useState({ latLng: [53, 19] });
+  const [updatedAt, setUpdatedAt] = useState("");
   useEffect(() => {
     // Calculate bounds based on GPX data
     if (mapRef.current && selectedRide) {
@@ -30,6 +32,8 @@ const Map = ({ tripData, setSelectedRide, selectedRide }) => {
     try {
       const response = await api.get("/api/v1/live-location");
       setLiveLocation(response.data);
+      const time = Moment(response.data.updatedAt).format("LLLL");
+      setUpdatedAt(time);
     } catch (err) {
       console.log(err);
     }
@@ -53,7 +57,7 @@ const Map = ({ tripData, setSelectedRide, selectedRide }) => {
         )}
         <Legend />
         <Marker position={liveLoaction.latLng} icon={DefaultIcon}>
-          <Popup>{"Updated at " + Moment(liveLoaction.updatedAt).format}</Popup>
+          <Popup>{"Updated at " + updatedAt}</Popup>
         </Marker>
       </MapContainer>
     </div>

@@ -21,7 +21,7 @@ const Timeline = ({ rides, setSelectedRide, selectedRide }) => {
   });
   return (
     <div className="trip-text-section">
-      <h1 className="primary-heading">Stobreč - Prevlaka</h1>
+      <h1 className="heading">Stobreč - Prevlaka</h1>
       <div className="trip-details">{timelineItems}</div>
     </div>
   );
