@@ -9,7 +9,7 @@ const TimelineItem = ({ routeName, handleClick, ride, selectedRide }) => {
     <div className={`trip-details-container ${shadow}`} onClick={() => handleClick(ride)}>
       <LineCircle routeName={routeName} selectedRide={selectedRide} />
       <div style={{ width: "100%" }}>
-        <TripDetailHeader ride={ride} routeName={routeName} />
+        <TripDetailHeader date={ride.date} length={ride.length} routeName={routeName} />
         <div className="trip-details-body">
           <Statuses statuses={ride.statuses} />
           <Images images={ride.images} />

@@ -24,11 +24,13 @@ const SetBoundsPolyLine = ({ tripData, selectedRide, setSelectedRide, scrollRef 
 
       return (
         <div key={index}>
-          <Polyline
-            positions={positions}
-            eventHandlers={handlers}
-            pathOptions={bounds === positions ? redColor : blueColor}
-          />
+          {positions.length !== 1 && (
+            <Polyline
+              positions={positions}
+              eventHandlers={handlers}
+              pathOptions={bounds === positions ? redColor : blueColor}
+            />
+          )}
           <Marker
             position={positions[positions.length - 1]}
             icon={bounds === positions ? redDotIcon : blueDotIcon}
