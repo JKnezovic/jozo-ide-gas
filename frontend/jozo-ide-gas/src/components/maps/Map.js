@@ -13,14 +13,13 @@ let DefaultIcon = L.icon({
   shadowUrl: iconShadow,
   iconAnchor: [12, 41],
 });
-const Map = ({ tripData, setSelectedRide, selectedRide }) => {
+const Map = ({ tripData, setSelectedRide, selectedRide, scrollRef }) => {
   const mapRef = useRef(null);
   const [liveLoaction, setLiveLocation] = useState({ latLng: [53, 19] });
   const [updatedAt, setUpdatedAt] = useState("");
   useEffect(() => {
-    // Calculate bounds based on GPX data
     if (mapRef.current && selectedRide) {
-      mapRef.current.fitBounds(selectedRide.positions);
+      mapRef.current.fitBounds(selectedRide.positions, { maxZoom: 9 });
     }
   }, [selectedRide]);
 
@@ -41,7 +40,7 @@ const Map = ({ tripData, setSelectedRide, selectedRide }) => {
 
   return (
     <div id="map" className="home-image-section">
-      <MapContainer scrollWheelZoom={true} ref={mapRef}>
+      <MapContainer scrollWheelZoom={true} ref={mapRef} zoom={9} center={selectedRide.positions[0]}>
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -52,6 +51,7 @@ const Map = ({ tripData, setSelectedRide, selectedRide }) => {
               tripData={tripData}
               selectedRide={selectedRide}
               setSelectedRide={setSelectedRide}
+              scrollRef={scrollRef}
             />
           </>
         )}
