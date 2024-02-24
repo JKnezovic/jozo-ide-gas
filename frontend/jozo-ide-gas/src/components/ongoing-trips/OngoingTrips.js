@@ -3,6 +3,7 @@ import Map from "../maps/Map";
 import api from "../../api/axiosConfig";
 import { useEffect, useState, useRef } from "react";
 import Timeline from "../timeline/Timeline";
+import "./OngoingTrips.css";
 
 const OngoingTrips = () => {
   const [tripData, setTripData] = useState([]);
@@ -26,7 +27,7 @@ const OngoingTrips = () => {
     getTrip();
   }, []);
   return (
-    <div className="home-banner-container">
+    <div className="ongoing-trip-container">
       {loading ? (
         <p>Loading...</p>
       ) : (

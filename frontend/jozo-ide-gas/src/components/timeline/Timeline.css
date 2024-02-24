@@ -1,0 +1,137 @@
+.trip-text-section {
+  margin-top: 30px;
+  width: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  height: 87vh;
+  margin-left: 7px;
+}
+.route-header {
+  display: flex;
+  flex-direction: row;
+  margin-left: 23px;
+  justify-content: space-between;
+  width: 87%;
+  border-bottom: 1px solid #b2b2b2;
+}
+.route-name-heading {
+  font-size: large;
+  font-weight: 600;
+}
+
+.total-length {
+  color: #94722e;
+  font-size: small;
+  border: 1px solid rgb(148, 114, 46);
+  border-radius: 5px;
+  padding: 3px 10px;
+  margin-bottom: 10px;
+  background-color: #ffeabf;
+}
+
+.trip-details-container {
+  width: 100%;
+  border-bottom: 1px solid #b2b2b2;
+  display: flex;
+  border-image: linear-gradient(to right, transparent 8%, #b2b2b2 8%, #b2b2b2 92%, transparent 92%)
+    1;
+}
+/* .trip-details-container:hover {
+  background-color: rgb(239, 238, 238);
+  width: 100%;
+} */
+
+/* .trip-details-container.active {
+  background-color: rgb(239, 238, 238);
+} */
+
+.trip-details {
+  width: 100%;
+  flex-direction: column-reverse;
+  display: flex;
+  height: 100%;
+  overflow: auto;
+}
+
+.trip-details-header {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 5px;
+}
+
+.trip-details-body {
+  width: 100%;
+}
+
+.line-circle {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  margin-right: 5px;
+}
+.circle {
+  position: absolute;
+  top: 21px;
+  border-radius: 50%;
+  border-style: solid;
+  border-width: 1px;
+  min-height: 15px;
+  min-width: 15px;
+  z-index: 10;
+  color: white;
+  font-size: 12px;
+}
+
+.line-div {
+  height: 100%;
+  width: 3px;
+  min-height: 50px;
+  margin-right: 10px;
+  margin-left: 10px;
+  top: 26px;
+  position: relative;
+}
+.route-name {
+  font-size: small;
+  font-weight: 600;
+}
+.date {
+  color: gray;
+  font-size: small;
+  margin-left: 3px;
+}
+
+.status-container {
+  display: flex;
+  flex-direction: row;
+  font-size: 11px;
+  background-color: #f6f6f6;
+  border-radius: 5px;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.status {
+  margin: 0;
+  padding: 5px 10px;
+}
+
+.bulletin {
+  padding-left: 5px;
+  font-size: 6px;
+}
+
+.length {
+  color: #94722e;
+  font-size: small;
+  border: 1px solid rgb(148, 114, 46);
+  border-radius: 5px;
+  padding: 3px 10px;
+  height: 26px;
+  margin-right: 15px;
+}

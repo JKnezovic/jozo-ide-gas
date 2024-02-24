@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import TimelineItem from "./TimelineItem";
-
+import "./Timeline.css";
 const Timeline = ({ rides, setSelectedRide, selectedRide, scrollRef, tripName }) => {
   const handleClick = (ride) => {
     setSelectedRide(ride);
@@ -28,7 +28,10 @@ const Timeline = ({ rides, setSelectedRide, selectedRide, scrollRef, tripName })
   });
   return (
     <div className="trip-text-section">
-      <h1 className="heading">{tripName}</h1>
+      <div className="route-header">
+        <h1 className="route-name-heading">{tripName}</h1>
+        <div className="total-length">{"107km"}</div>
+      </div>
       <div ref={scrollRef} className="trip-details">
         {timelineItems}
       </div>

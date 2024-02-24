@@ -1,15 +1,16 @@
 import { Link, useMatch, useResolvedPath } from "react-router-dom";
 import React, { useState } from "react";
-//import Logo from "../../assets/bicycle_yellow.png";
+import Logo from "../../assets/Logo.png";
 import { HiOutlineBars3 } from "react-icons/hi2";
 import BurgerMenu from "./BurgerMenu";
+import "./Header.css";
 export default function Header() {
   const [openMenu, setOpenMenu] = useState(false);
 
   return (
     <nav>
       <Link to="/" className="nav-logo-container">
-        {/*  <img src={Logo} width={50} alt="" /> */}
+        <img src={Logo} width={70} alt="" />
       </Link>
       <div className="navbar-links-container">
         <CustomLink to="/">Home</CustomLink>

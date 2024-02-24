@@ -2,10 +2,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: "Reem Kufi", sans-serif !important;
-}
-#map {
-  height: 94vh;
+  font-family: "Poppins", sans-serif !important;
 }
 
 .leaflet-container {
@@ -27,180 +24,8 @@ body {
   overflow-x: hidden;
 }
 
-nav {
-  display: flex;
-  align-items: center;
-  min-height: 49px;
-  background: url(../src/assets/topo-bg-5-black.png);
-  background-color: #94722e;
-}
-
-.navbar-links-container {
-  margin-right: 50px;
-  margin-left: 50px;
-}
-
-.navbar-links-container a {
-  margin-right: 1rem;
-  padding: 10px;
-  border-radius: 15px;
-  text-decoration: none;
-  color: rgb(255, 255, 255);
-  font-size: 1.1rem;
-}
-
-.navbar-links-container a.active {
-  font-weight: bold;
-  color: rgb(255, 255, 255) !important;
-}
-
-.navbar-links-container a:hover {
-  background-color: #f3ecec;
-  color: black !important;
-}
-
-.navbar-menu-container {
-  display: none;
-}
-
-.home-banner-container {
-  position: relative;
-  display: flex;
-}
-.home-bannerImage-container {
-  position: absolute;
-  top: -100px;
-  right: -170px;
-  z-index: -2;
-  max-width: 700px;
-}
-.home-image-section {
+.map-section {
   flex: 1;
-}
-.home-text-section {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-}
-.primary-heading {
-  font-size: clamp(1rem, 2.5vw, 3rem);
-  color: #4c4c4c;
-  font-weight: bold;
-  /* line-height: 5rem; */
-  max-width: 600px;
-}
-.heading {
-  font-size: clamp(1rem, 2.5vw, 2rem);
-  color: #4c4c4c;
-  font-weight: bold;
-  /* line-height: 5rem; */
-  max-width: 600px;
-  padding-left: 7px;
-}
-.primary-text {
-  font-size: clamp(1rem, 1vw, 1.5rem);
-  max-width: 500px;
-  color: #797979;
-  margin: 1.5rem 0rem;
-}
-.secondary-button {
-  padding: 1rem 2.5rem;
-  background-color: #ffc40d;
-  outline: none;
-  border: none;
-  border-radius: 5rem;
-  font-size: 1.1rem;
-  cursor: pointer;
-  font-weight: 600;
-  color: black;
-  transition: 0.2s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-decoration: none;
-}
-.secondary-button:hover {
-  background-color: #e48f0f;
-}
-
-.trip-text-section {
-  width: 400px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  height: 94vh;
-}
-
-.trip-details-container:hover {
-  background-color: rgb(239, 238, 238);
-  width: 100%;
-}
-
-.trip-details-container.active {
-  background-color: rgb(239, 238, 238);
-}
-
-.trip-details {
-  width: 100%;
-  flex-direction: column-reverse;
-  display: flex;
-  height: 100%;
-  overflow: auto;
-}
-.trip-details-container {
-  width: 100%;
-  display: flex;
-  height: 100%; /* Set the height to 100% to fill the entire parent */
-}
-
-.trip-details-header {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  margin-top: 5px;
-}
-
-.trip-details-body {
-  width: 100%;
-}
-
-.line-circle {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-}
-.circle {
-  position: absolute;
-  top: 13px;
-  border-radius: 50%;
-  border-color: white;
-  border-style: solid;
-  border-width: 1px;
-  min-height: 15px;
-  min-width: 15px;
-}
-
-.line-div {
-  height: 100%;
-  width: 5px;
-  min-height: 50px;
-  margin-right: 10px;
-  margin-left: 10px;
-}
-.route-name {
-  font-size: 14px;
-  font-weight: bold;
-}
-.date {
-  color: gray;
-  font-size: small;
-  margin-top: 1px;
-  margin-left: 3px;
 }
 
 .flex {
@@ -229,7 +54,7 @@ nav {
   border-radius: 10px;
 }
 .red-dot-icon {
-  background-color: #ee6055;
+  background-color: #93712d;
   border-radius: 50%;
   width: 8px;
   height: 8px;
@@ -239,13 +64,16 @@ nav {
 }
 
 .blue-dot-icon {
-  background-color: #6c8ead;
+  background-color: #6b92b2;
   border-radius: 50%;
   width: 8px;
   height: 8px;
   border-color: white;
   border-style: solid;
   border-width: 1px;
+}
+.leaflet-popup {
+  padding-bottom: 30px; /* adjust as you see fit */
 }
 .column {
   flex: 1;
@@ -321,47 +149,6 @@ nav {
   }
   .primary-subheading {
     text-align: center;
-  }
-  .watch-video-button {
-    margin-left: 0rem !important;
-    margin-top: 1rem;
-    font-size: 1rem !important;
-  }
-  .watch-video-button svg {
-    margin-right: 0.5rem !important;
-  }
-  .about-section-image-container {
-    margin-right: 0rem !important;
-  }
-  .work-section-wrapper {
-    margin-top: 5rem !important;
-  }
-  .work-section-bottom {
-    margin-top: 1rem !important;
-  }
-  .contact-form-container {
-    padding: 0.5rem !important;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    border-radius: 1rem !important;
-  }
-  .contact-form-container input {
-    font-size: 1rem !important;
-    max-width: 100%;
-    padding: 0.5rem 1rem !important;
-    margin-bottom: 0.8rem !important;
-    text-align: center;
-  }
-  .footer-wrapper {
-    flex-direction: column;
-  }
-  .footer-section-two {
-    flex-direction: column;
-    margin-top: 2rem;
-  }
-  .footer-section-columns {
-    margin: 1rem 0rem;
   }
   .App {
     max-width: 95vw;

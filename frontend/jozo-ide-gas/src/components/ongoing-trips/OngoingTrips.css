@@ -1,0 +1,4 @@
+.ongoing-trip-container {
+  display: flex;
+  flex-direction: row;
+}

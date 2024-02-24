@@ -2,8 +2,8 @@ import React, { useMemo } from "react";
 import { Polyline, Marker } from "react-leaflet";
 import L from "leaflet";
 
-const redColor = { color: "#EE6055", weight: 5 };
-const blueColor = { color: "#6C8EAD", weight: 5 };
+const goldColor = { color: "#93712D", weight: 5 };
+const blueColor = { color: "#6B92B2", weight: 5 };
 
 let redDotIcon = L.divIcon({ className: "red-dot-icon" });
 let blueDotIcon = L.divIcon({ className: "blue-dot-icon" });
@@ -28,7 +28,7 @@ const SetBoundsPolyLine = ({ tripData, selectedRide, setSelectedRide, scrollRef 
             <Polyline
               positions={positions}
               eventHandlers={handlers}
-              pathOptions={bounds === positions ? redColor : blueColor}
+              pathOptions={bounds === positions ? goldColor : blueColor}
             />
           )}
           <Marker
