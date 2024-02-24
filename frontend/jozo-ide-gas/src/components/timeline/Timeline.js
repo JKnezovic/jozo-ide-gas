@@ -1,11 +1,10 @@
 import React, { useEffect } from "react";
 import TimelineItem from "./TimelineItem";
 import "./Timeline.css";
-const Timeline = ({ rides, setSelectedRide, selectedRide, scrollRef, tripName }) => {
+const Timeline = ({ rides, setSelectedRide, selectedRide, scrollRef, tripName, totalLength }) => {
   const handleClick = (ride) => {
     setSelectedRide(ride);
   };
-
   useEffect(() => {
     let index = scrollRef.current.childElementCount - 1;
     const selectedItem = scrollRef.current.childNodes[index];
@@ -30,7 +29,7 @@ const Timeline = ({ rides, setSelectedRide, selectedRide, scrollRef, tripName })
     <div className="trip-text-section">
       <div className="route-header">
         <h1 className="route-name-heading">{tripName}</h1>
-        <div className="total-length">{"107km"}</div>
+        <div className="total-length">{totalLength + "km"}</div>
       </div>
       <div ref={scrollRef} className="trip-details">
         {timelineItems}

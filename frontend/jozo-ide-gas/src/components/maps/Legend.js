@@ -3,7 +3,7 @@ import PlaceOutlinedIcon from "@mui/icons-material/PlaceOutlined";
 const legendData = [
   { background: "red-background", label: "Latest live location" },
   { background: "gold-background", label: "Selected route" },
-  { background: "blue-background", label: "Route" },
+  { background: "blue-background", label: "Whole Route" },
 ];
 
 const Legend = () => {

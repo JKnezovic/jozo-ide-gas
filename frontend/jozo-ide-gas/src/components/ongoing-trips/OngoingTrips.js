@@ -44,6 +44,7 @@ const OngoingTrips = () => {
             setSelectedRide={setSelectedRide}
             scrollRef={scrollRef}
             tripName={tripData.tripName}
+            totalLength={tripData.totalLength}
           />
         </>
       )}
