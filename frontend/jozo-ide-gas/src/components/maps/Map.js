@@ -4,15 +4,14 @@ import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import SetBoundsPolyLine from "./SetBoundsPolyLine";
 import Legend from "./Legend";
-import icon from "leaflet/dist/images/marker-icon.png";
+import pinIcon from "../../assets/location-pin.png";
 import iconShadow from "leaflet/dist/images/marker-shadow.png";
 import Moment from "moment";
 import L from "leaflet";
 import "./Map.css";
 let DefaultIcon = L.icon({
-  iconUrl: icon,
-  shadowUrl: iconShadow,
-  iconAnchor: [12, 41],
+  iconUrl: pinIcon,
+  iconAnchor: [16, 32],
 });
 const Map = ({ tripData, setSelectedRide, selectedRide, scrollRef }) => {
   const mapRef = useRef(null);
