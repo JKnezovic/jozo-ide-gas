@@ -7,9 +7,9 @@ const TripDetailHeader = ({ length, date, routeName }) => {
   const label = length ? `${length}km` : "REST";
   return (
     <div className="trip-details-header">
-      <div className="flex" style={{ marginTop: "6px" }}>
+      <div style={{ marginTop: "6px" }}>
         <p className="route-name">{routeName + " (Day " + difference + ")"}</p>
-        <p className="date">{" - " + moment.format("DD.MMM.YY.")}</p>
+        <p className="date">{moment.format("DD.MMM.YY.")}</p>
       </div>
       <div className="length">{label}</div>
     </div>
