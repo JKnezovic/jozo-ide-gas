@@ -5,7 +5,6 @@ import "leaflet/dist/leaflet.css";
 import SetBoundsPolyLine from "./SetBoundsPolyLine";
 import Legend from "./Legend";
 import pinIcon from "../../assets/location-pin.png";
-import iconShadow from "leaflet/dist/images/marker-shadow.png";
 import Moment from "moment";
 import L from "leaflet";
 import "./Map.css";

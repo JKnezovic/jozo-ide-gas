@@ -5,7 +5,7 @@ import L from "leaflet";
 const goldColor = { color: "#93712D", weight: 5 };
 const blueColor = { color: "#6B92B2", weight: 5 };
 
-let redDotIcon = L.divIcon({ className: "red-dot-icon" });
+let redDotIcon = L.divIcon({ className: "gold-dot-icon" });
 let blueDotIcon = L.divIcon({ className: "blue-dot-icon" });
 
 const SetBoundsPolyLine = ({ tripData, selectedRide, setSelectedRide, scrollRef }) => {
