@@ -12,7 +12,7 @@ let DefaultIcon = L.icon({
   iconUrl: pinIcon,
   iconAnchor: [16, 32],
 });
-const Map = ({ tripData, setSelectedRide, selectedRide, scrollRef }) => {
+const Map = ({ tripData, setSelectedRide, selectedRide, scrollRef, liveLocation }) => {
   const mapRef = useRef(null);
   const [liveLoaction, setLiveLocation] = useState({ latLng: [53, 19] });
   const [updatedAt, setUpdatedAt] = useState("");
@@ -55,9 +55,11 @@ const Map = ({ tripData, setSelectedRide, selectedRide, scrollRef }) => {
           </>
         )}
         <Legend />
-        <Marker position={liveLoaction.latLng} icon={DefaultIcon}>
-          <Popup>{"Updated at " + updatedAt}</Popup>
-        </Marker>
+        {liveLocation && (
+          <Marker position={liveLoaction.latLng} icon={DefaultIcon}>
+            <Popup>{"Updated at " + updatedAt}</Popup>
+          </Marker>
+        )}
       </MapContainer>
     </div>
   );

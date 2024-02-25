@@ -13,7 +13,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />}></Route>
         <Route path="/ongoing" element={<OngoingTrips />}></Route>
-        <Route path="/done" element={<PastTrips />}></Route>
+        <Route path="/done/*" element={<PastTrips />}></Route>
       </Routes>
     </div>
   );

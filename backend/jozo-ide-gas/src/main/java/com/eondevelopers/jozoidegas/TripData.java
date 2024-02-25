@@ -23,4 +23,9 @@ public class TripData {
     @DocumentReference
     private List<Ride> rideIds;
     private String status;
+    private String description;
+    private String imageSource;
+    private String date;
+    private int days;
+    private String tripId;
 }

@@ -1,0 +1,44 @@
+import React, { useEffect } from "react";
+import Map from "../maps/Map";
+import { useState, useRef } from "react";
+import Timeline from "../timeline/Timeline";
+import "../ongoing-trips/OngoingTrips.css";
+import { useParams } from "react-router-dom";
+import Loading from "../loading/Loading";
+const TripDetails = ({ tripData }) => {
+  const [selectedRide, setSelectedRide] = useState(null);
+  const [trip, setTrip] = useState(tripData[0]);
+  const scrollRef = useRef(null);
+  const { tripName } = useParams();
+
+  useEffect(() => {
+    const trip = tripData.find((trip) => trip.tripId === tripName);
+    const rides = trip.rideIds;
+    setTrip(trip);
+    setSelectedRide(rides[rides.length - 1]);
+  }, [tripData, tripName]);
+
+  return !selectedRide ? (
+    <Loading />
+  ) : (
+    <div className="ongoing-trip-container">
+      <Map
+        tripData={trip}
+        selectedRide={selectedRide}
+        setSelectedRide={setSelectedRide}
+        scrollRef={scrollRef}
+        liveLocation={false}
+      />
+      <Timeline
+        rides={trip.rideIds}
+        selectedRide={selectedRide}
+        setSelectedRide={setSelectedRide}
+        scrollRef={scrollRef}
+        tripName={trip.tripName}
+        totalLength={trip.totalLength}
+      />
+    </div>
+  );
+};
+
+export default TripDetails;

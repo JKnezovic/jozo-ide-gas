@@ -36,6 +36,7 @@ const OngoingTrips = () => {
         selectedRide={selectedRide}
         setSelectedRide={setSelectedRide}
         scrollRef={scrollRef}
+        liveLocation={true}
       />
       <Timeline
         rides={tripData.rideIds}

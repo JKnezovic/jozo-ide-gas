@@ -1,0 +1,55 @@
+.past-trips {
+  display: flex;
+  margin: 20px 10%;
+}
+
+.card-image {
+  object-fit: cover;
+  width: 250px;
+  height: 150px;
+  margin: 2px;
+}
+
+.past-trips-card {
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 250px;
+  margin: 10px;
+}
+
+.cards-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-content: flex-start;
+}
+.Link {
+  text-decoration: none;
+  color: #273564;
+}
+.card-date {
+  color: rgb(161, 161, 161);
+  font-size: 11px;
+  margin-left: 10px;
+}
+.card-title {
+  align-self: center;
+  margin-left: 10px;
+  margin-bottom: 0;
+  margin-top: 10px;
+  font-weight: 600;
+}
+.card-description {
+  color: rgb(41, 41, 41);
+  font-size: small;
+  margin-left: 10px;
+}
+.card-length {
+  margin-left: 10px;
+}
+
+.card-chips-container {
+  display: flex;
+}
+.card-days {
+}

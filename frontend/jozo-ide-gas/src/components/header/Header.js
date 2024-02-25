@@ -1,4 +1,4 @@
-import { Link, useMatch, useResolvedPath } from "react-router-dom";
+import { Link, useLocation, useResolvedPath } from "react-router-dom";
 import React, { useState } from "react";
 import Logo from "../../assets/Logo.png";
 import { HiOutlineBars3 } from "react-icons/hi2";
@@ -27,7 +27,11 @@ export default function Header() {
 
 function CustomLink({ to, children, ...props }) {
   const resolvedPath = useResolvedPath(to);
-  const isActive = useMatch({ path: resolvedPath.pathname, end: true });
+  const location = useLocation();
+  const isActive =
+    resolvedPath.pathname === "/"
+      ? location.pathname === "/"
+      : location.pathname.includes(resolvedPath.pathname);
 
   return (
     <Link className={isActive ? "active" : ""} to={to} {...props}>
