@@ -4,6 +4,7 @@ import api from "../../api/axiosConfig";
 import { useEffect, useState, useRef } from "react";
 import Timeline from "../timeline/Timeline";
 import "./OngoingTrips.css";
+import Loading from "../loading/Loading";
 
 const OngoingTrips = () => {
   const [tripData, setTripData] = useState([]);
@@ -26,28 +27,24 @@ const OngoingTrips = () => {
   useEffect(() => {
     getTrip();
   }, []);
-  return (
+  return loading ? (
+    <Loading />
+  ) : (
     <div className="ongoing-trip-container">
-      {loading ? (
-        <p>Loading...</p>
-      ) : (
-        <>
-          <Map
-            tripData={tripData}
-            selectedRide={selectedRide}
-            setSelectedRide={setSelectedRide}
-            scrollRef={scrollRef}
-          />
-          <Timeline
-            rides={tripData.rideIds}
-            selectedRide={selectedRide}
-            setSelectedRide={setSelectedRide}
-            scrollRef={scrollRef}
-            tripName={tripData.tripName}
-            totalLength={tripData.totalLength}
-          />
-        </>
-      )}
+      <Map
+        tripData={tripData}
+        selectedRide={selectedRide}
+        setSelectedRide={setSelectedRide}
+        scrollRef={scrollRef}
+      />
+      <Timeline
+        rides={tripData.rideIds}
+        selectedRide={selectedRide}
+        setSelectedRide={setSelectedRide}
+        scrollRef={scrollRef}
+        tripName={tripData.tripName}
+        totalLength={tripData.totalLength}
+      />
     </div>
   );
 };

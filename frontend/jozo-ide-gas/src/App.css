@@ -164,4 +164,12 @@ body {
   }
 }
 
+.loading-container {
+  height: 91vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
 /* Add more styling as needed */
