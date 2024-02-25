@@ -10,6 +10,7 @@ const TripDetails = ({ tripData }) => {
   const [trip, setTrip] = useState(tripData[0]);
   const scrollRef = useRef(null);
   const { tripName } = useParams();
+  const [mapVisible, setMapVisible] = useState(true);
 
   useEffect(() => {
     const trip = tripData.find((trip) => trip.tripId === tripName);
@@ -17,7 +18,9 @@ const TripDetails = ({ tripData }) => {
     setTrip(trip);
     setSelectedRide(rides[rides.length - 1]);
   }, [tripData, tripName]);
-
+  const handleClick = () => {
+    setMapVisible(!mapVisible);
+  };
   return !selectedRide ? (
     <Loading />
   ) : (
@@ -28,6 +31,7 @@ const TripDetails = ({ tripData }) => {
         setSelectedRide={setSelectedRide}
         scrollRef={scrollRef}
         liveLocation={false}
+        mapVisible={mapVisible}
       />
       <Timeline
         rides={trip.rideIds}
@@ -36,7 +40,11 @@ const TripDetails = ({ tripData }) => {
         scrollRef={scrollRef}
         tripName={trip.tripName}
         totalLength={trip.totalLength}
+        mapVisible={mapVisible}
       />
+      <div onClick={() => handleClick()} className="button-switch">
+        {mapVisible ? "Show Timeline" : "Show on Map"}
+      </div>
     </div>
   );
 };

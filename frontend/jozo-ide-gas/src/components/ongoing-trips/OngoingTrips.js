@@ -11,7 +11,7 @@ const OngoingTrips = () => {
   const [loading, setLoading] = useState(true);
   const [selectedRide, setSelectedRide] = useState(null);
   const scrollRef = useRef(null);
-
+  const [mapVisible, setMapVisible] = useState(true);
   const getTrip = async () => {
     try {
       const response = await api.get("/api/v1/trips/ongoing");
@@ -23,6 +23,9 @@ const OngoingTrips = () => {
       console.log(err);
       setLoading(false);
     }
+  };
+  const handleClick = () => {
+    setMapVisible(!mapVisible);
   };
   useEffect(() => {
     getTrip();
@@ -37,6 +40,7 @@ const OngoingTrips = () => {
         setSelectedRide={setSelectedRide}
         scrollRef={scrollRef}
         liveLocation={true}
+        mapVisible={mapVisible}
       />
       <Timeline
         rides={tripData.rideIds}
@@ -45,7 +49,11 @@ const OngoingTrips = () => {
         scrollRef={scrollRef}
         tripName={tripData.tripName}
         totalLength={tripData.totalLength}
+        mapVisible={mapVisible}
       />
+      <div onClick={() => handleClick()} className="button-switch">
+        {mapVisible ? "Show Timeline" : "Show on Map"}
+      </div>
     </div>
   );
 };

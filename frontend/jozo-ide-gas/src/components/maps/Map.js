@@ -12,7 +12,7 @@ let DefaultIcon = L.icon({
   iconUrl: pinIcon,
   iconAnchor: [16, 32],
 });
-const Map = ({ tripData, setSelectedRide, selectedRide, scrollRef, liveLocation }) => {
+const Map = ({ tripData, setSelectedRide, selectedRide, scrollRef, liveLocation, mapVisible }) => {
   const mapRef = useRef(null);
   const [liveLoaction, setLiveLocation] = useState({ latLng: [53, 19] });
   const [updatedAt, setUpdatedAt] = useState("");
@@ -38,7 +38,7 @@ const Map = ({ tripData, setSelectedRide, selectedRide, scrollRef, liveLocation 
   };
 
   return (
-    <div id="map" className="map-section">
+    <div id="map" className={"map-section" + (mapVisible ? "" : " none")}>
       <MapContainer scrollWheelZoom={true} ref={mapRef} zoom={9} center={selectedRide.positions[0]}>
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

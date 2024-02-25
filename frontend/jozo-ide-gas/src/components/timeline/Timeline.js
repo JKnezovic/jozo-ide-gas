@@ -1,7 +1,15 @@
 import React, { useEffect } from "react";
 import TimelineItem from "./TimelineItem";
 import "./Timeline.css";
-const Timeline = ({ rides, setSelectedRide, selectedRide, scrollRef, tripName, totalLength }) => {
+const Timeline = ({
+  rides,
+  setSelectedRide,
+  selectedRide,
+  scrollRef,
+  tripName,
+  totalLength,
+  mapVisible,
+}) => {
   const handleClick = (ride) => {
     setSelectedRide(ride);
   };
@@ -26,7 +34,7 @@ const Timeline = ({ rides, setSelectedRide, selectedRide, scrollRef, tripName, t
     );
   });
   return (
-    <div className="trip-text-section">
+    <div className={"trip-text-section" + (mapVisible ? " none" : "")}>
       <div className="route-header">
         <h1 className="route-name-heading">{tripName}</h1>
         <div className="total-length">{totalLength + "km"}</div>

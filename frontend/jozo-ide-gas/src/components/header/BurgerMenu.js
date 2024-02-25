@@ -15,17 +15,17 @@ export default function BurgerMenu({ setOpenMenu, openMenu }) {
   const menuOptions = [
     {
       text: "Home",
-      icon: <HomeIcon />,
+      icon: <HomeIcon className="gold-font" />,
       path: "/",
     },
     {
       text: "Current Trip",
-      icon: <DirectionsBikeIcon />,
+      icon: <DirectionsBikeIcon className="gold-font" />,
       path: "/ongoing",
     },
     {
       text: "Past Trips",
-      icon: <TimelineIcon />,
+      icon: <TimelineIcon className="gold-font" />,
       path: "/done",
     },
   ];

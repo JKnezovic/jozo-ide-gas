@@ -82,7 +82,7 @@ body {
   border-width: 1px;
 }
 .leaflet-popup {
-  padding-bottom: 30px; /* adjust as you see fit */
+  padding-bottom: 30px;
 }
 .column {
   flex: 1;
@@ -103,67 +103,6 @@ body {
   background-color: #e48f0f;
 }
 
-@media (max-width: 800px) {
-  .nav-logo-container {
-    max-width: 140px;
-  }
-  .navbar-links-container {
-    display: none;
-  }
-  .navbar-menu-container {
-    display: flex;
-  }
-  .home-bannerImage-container {
-    max-width: 450px;
-  }
-  .home-banner-container,
-  .about-section-container {
-    flex-direction: column-reverse;
-    align-items: center;
-    justify-content: center;
-  }
-  .about-section-container {
-    flex-direction: column;
-  }
-  .home-image-section,
-  .about-section-image-container {
-    width: 100%;
-    max-width: 400px;
-  }
-  .primary-heading {
-    text-align: center;
-    max-width: 90%;
-  }
-  .primary-text {
-    text-align: center;
-    max-width: 80%;
-  }
-  .home-text-section,
-  .about-section-text-container {
-    justify-content: center;
-    align-items: center;
-    margin-top: 4rem;
-  }
-  .secondary-button {
-    font-size: 1rem;
-    padding: 0.8rem 2rem;
-    cursor: pointer;
-  }
-  .about-section-container {
-    margin-top: 5rem !important;
-  }
-  .about-buttons-container {
-    justify-content: center;
-    flex-direction: column;
-  }
-  .primary-subheading {
-    text-align: center;
-  }
-  .App {
-    max-width: 95vw;
-  }
-}
-
 .loading-container {
   height: 91vh;
   display: flex;
@@ -171,5 +110,3 @@ body {
   align-items: center;
   flex-direction: column;
 }
-
-/* Add more styling as needed */

@@ -22,7 +22,7 @@
   align-items: flex-start;
 }
 .primary-heading {
-  font-size: clamp(1.5rem, 4vw, 5rem);
+  font-size: clamp(2rem, 4vw, 5rem);
   color: #000000;
   font-weight: bold;
   line-height: 4rem;
@@ -59,4 +59,23 @@
 }
 .secondary-button:hover {
   background-color: #e48f0f;
+}
+
+@media (max-width: 800px) {
+  .home-banner-container {
+    display: flex;
+    justify-content: center;
+    margin-left: 0;
+    margin-top: 30%;
+  }
+  .primary-heading {
+    align-self: center;
+  }
+  .primary-text {
+    align-self: center;
+    max-width: 80%;
+  }
+  .secondary-button {
+    align-self: center;
+  }
 }

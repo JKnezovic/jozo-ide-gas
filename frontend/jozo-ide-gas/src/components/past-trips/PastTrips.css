@@ -51,5 +51,14 @@
 .card-chips-container {
   display: flex;
 }
-.card-days {
+
+@media (max-width: 800px) {
+  .card-image {
+    width: 100%;
+    height: 200px;
+  }
+
+  .past-trips-card {
+    width: 100%;
+  }
 }

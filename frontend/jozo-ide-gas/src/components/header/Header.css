@@ -52,3 +52,14 @@ nav {
 .navbar-menu-container {
   display: none;
 }
+
+@media (max-width: 800px) {
+  .navbar-menu-container {
+    display: flex;
+    font-size: 35px;
+    padding-right: 5px;
+  }
+  .navbar-links-container {
+    display: none;
+  }
+}
