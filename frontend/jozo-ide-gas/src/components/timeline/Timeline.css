@@ -36,6 +36,7 @@
   display: flex;
   border-image: linear-gradient(to right, transparent 8%, #b2b2b2 8%, #b2b2b2 92%, transparent 92%)
     1;
+  cursor: pointer;
 }
 /* .trip-details-container:hover {
   background-color: rgb(239, 238, 238);
