@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import TimelineItem from "./TimelineItem";
 import "./Timeline.css";
 const Timeline = ({
@@ -13,26 +13,23 @@ const Timeline = ({
   const handleClick = (ride) => {
     setSelectedRide(ride);
   };
-  useEffect(() => {
-    let index = scrollRef.current.childElementCount - 1;
-    const selectedItem = scrollRef.current.childNodes[index];
-    selectedItem.scrollIntoView({ behavior: "smooth", block: "center" });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
-  const timelineItems = rides.map((ride, index) => {
-    const routeName = ride.routeName;
+  const timelineItems = rides
+    .slice()
+    .reverse()
+    .map((ride, index) => {
+      const routeName = ride.routeName;
 
-    return (
-      <TimelineItem
-        handleClick={handleClick}
-        key={index}
-        routeName={routeName}
-        ride={ride}
-        selectedRide={selectedRide}
-      />
-    );
-  });
+      return (
+        <TimelineItem
+          handleClick={handleClick}
+          key={index}
+          routeName={routeName}
+          ride={ride}
+          selectedRide={selectedRide}
+        />
+      );
+    });
   return (
     <div className={"trip-text-section" + (mapVisible ? " none" : "")}>
       <div className="route-header">

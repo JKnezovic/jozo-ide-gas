@@ -13,11 +13,12 @@ const SetBoundsPolyLine = ({ tripData, selectedRide, setSelectedRide, scrollRef 
 
   const renderPolylines = useMemo(() => {
     return tripData.rideIds.map((rideId, index) => {
+      const length = tripData.rideIds.length - 1;
       const positions = rideId.positions;
       const handlers = {
         click() {
           setSelectedRide(rideId);
-          const selectedItem = scrollRef.current.childNodes[index];
+          const selectedItem = scrollRef.current.childNodes[length - index];
           selectedItem.scrollIntoView({ behavior: "smooth", block: "center" });
         },
       };

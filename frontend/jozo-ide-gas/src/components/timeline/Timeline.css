@@ -49,7 +49,7 @@
 
 .trip-details {
   width: 100%;
-  flex-direction: column-reverse;
+  flex-direction: column;
   display: flex;
   height: 100%;
   overflow: auto;
