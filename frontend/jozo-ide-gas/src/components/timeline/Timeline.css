@@ -4,7 +4,7 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  height: 87vh;
+  height: calc(100dvh - 100px);
   margin-left: 7px;
 }
 .route-header {
@@ -175,5 +175,15 @@
 
   .length {
     margin-right: 30px;
+  }
+}
+@media (max-width: 380px) {
+  .thumb-overlay {
+    width: 90px;
+    height: 90px;
+  }
+  .thumb {
+    width: 90px;
+    height: 90px;
   }
 }

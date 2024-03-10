@@ -1,5 +1,5 @@
 #map {
-  height: 91vh;
+  height: calc(100dvh - 70px);
 }
 
 .legend {
@@ -27,4 +27,12 @@
   margin-left: 3px;
   border-radius: 50%;
   color: white;
+}
+
+@media (max-width: 800px) {
+  .legend {
+    bottom: 10px;
+    left: 10px;
+    max-width: 50%;
+  }
 }

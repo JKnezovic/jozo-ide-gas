@@ -30,7 +30,7 @@ img {
   height: auto;
 }
 .App {
-  min-height: 100vh;
+  min-height: 100dvh;
   max-width: 1900px;
   margin: 0rem auto;
 }
@@ -104,7 +104,7 @@ body {
 }
 
 .loading-container {
-  height: 91vh;
+  height: calc(100vh - 70px);
   display: flex;
   justify-content: center;
   align-items: center;

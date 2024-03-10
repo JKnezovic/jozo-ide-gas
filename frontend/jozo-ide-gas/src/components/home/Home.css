@@ -4,7 +4,7 @@
   right: 0;
 }
 .home-image-section img {
-  max-height: 90vh;
+  max-height: calc(100dvh - 70px);
 }
 
 .home-banner-container {
@@ -66,7 +66,6 @@
     display: flex;
     justify-content: center;
     margin-left: 0;
-    margin-top: 30%;
   }
   .primary-heading {
     align-self: center;
