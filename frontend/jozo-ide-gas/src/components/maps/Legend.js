@@ -8,7 +8,6 @@ const legendData = [
 
 const Legend = ({ liveLocation }) => {
   const legendItems = legendData.map((item, index) => {
-    console.log(liveLocation, index);
     if (liveLocation === false && index === 0) return null;
     else
       return (

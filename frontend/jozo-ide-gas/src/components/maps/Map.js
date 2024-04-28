@@ -8,6 +8,7 @@ import pinIcon from "../../assets/location-pin.png";
 import Moment from "moment";
 import L from "leaflet";
 import "./Map.css";
+import CurrentlyCycling from "../loading/CurrentlyCycling";
 let DefaultIcon = L.icon({
   iconUrl: pinIcon,
   iconAnchor: [16, 32],
@@ -30,7 +31,7 @@ const Map = ({ tripData, setSelectedRide, selectedRide, scrollRef, liveLocation,
     try {
       const response = await api.get("/api/v1/live-location");
       setLiveLocation(response.data);
-      const time = Moment(response.data.updatedAt).format("LLLL");
+      const time = Moment(response.data.updatedAt).format("dddd, MMMM DD, YYYY HH:mm");
       setUpdatedAt(time);
     } catch (err) {
       console.log(err);
@@ -55,6 +56,13 @@ const Map = ({ tripData, setSelectedRide, selectedRide, scrollRef, liveLocation,
           </>
         )}
         <Legend liveLocation={liveLocation} />
+        {liveLocation && (
+          <CurrentlyCycling
+            updatedAt={updatedAt}
+            mapRef={mapRef.current}
+            position={liveLoaction.latLng}
+          />
+        )}
         {liveLocation && (
           <Marker position={liveLoaction.latLng} icon={DefaultIcon}>
             <Popup>{"Updated at " + updatedAt}</Popup>
