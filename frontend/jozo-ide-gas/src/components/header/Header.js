@@ -1,6 +1,7 @@
 import { Link, useLocation, useResolvedPath } from "react-router-dom";
 import React, { useState } from "react";
 import Logo from "../../assets/Logo.png";
+import BuyMeACoffee from "../../assets/white-button.png";
 import { HiOutlineBars3 } from "react-icons/hi2";
 import BurgerMenu from "./BurgerMenu";
 import "./Header.css";
@@ -16,6 +17,9 @@ export default function Header() {
         <CustomLink to="/">Home</CustomLink>
         <CustomLink to="/ongoing">Current Trip</CustomLink>
         <CustomLink to="/done">Past Trips</CustomLink>
+        <Link to="https://buymeacoffee.com/jozoidegas" target="_blank" rel="noopener noreferrer">
+          <img src={BuyMeACoffee} width={160} alt="" />
+        </Link>
       </div>
       <div className="navbar-menu-container">
         <HiOutlineBars3 onClick={() => setOpenMenu(true)} />

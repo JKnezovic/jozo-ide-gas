@@ -53,6 +53,10 @@ nav {
   display: none;
 }
 
+.buymeacoffee {
+  margin-left: 5px;
+}
+
 @media (max-width: 800px) {
   .navbar-menu-container {
     display: flex;

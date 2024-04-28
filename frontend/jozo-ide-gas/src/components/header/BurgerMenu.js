@@ -10,6 +10,7 @@ import ListItemText from "@mui/material/ListItemText";
 import HomeIcon from "@mui/icons-material/Home";
 import DirectionsBikeIcon from "@mui/icons-material/DirectionsBike";
 import TimelineIcon from "@mui/icons-material/Timeline";
+import BuyMeACoffee from "../../assets/white-button.png";
 import { Link } from "react-router-dom";
 export default function BurgerMenu({ setOpenMenu, openMenu }) {
   const menuOptions = [
@@ -49,6 +50,9 @@ export default function BurgerMenu({ setOpenMenu, openMenu }) {
             </ListItem>
           ))}
         </List>
+        <Link to="https://buymeacoffee.com/jozoidegas" target="_blank" rel="noopener noreferrer">
+          <img src={BuyMeACoffee} width={160} alt="" className="buymeacoffee" />
+        </Link>
         <Divider />
       </Box>
     </Drawer>
