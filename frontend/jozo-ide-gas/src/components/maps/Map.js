@@ -54,7 +54,7 @@ const Map = ({ tripData, setSelectedRide, selectedRide, scrollRef, liveLocation,
             />
           </>
         )}
-        <Legend />
+        <Legend liveLocation={liveLocation} />
         {liveLocation && (
           <Marker position={liveLoaction.latLng} icon={DefaultIcon}>
             <Popup>{"Updated at " + updatedAt}</Popup>
