@@ -1,8 +1,8 @@
 package com.eondevelopers.jozoidegas;
 
-import org.bson.types.ObjectId;
+
+import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Update;
@@ -10,8 +10,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -21,14 +23,31 @@ public class RideService {
     private RideRepository rideRepository;
     @Autowired
     private MongoTemplate mongoTemplate;
-    public Ride createRide(String routeName, String tripId, MultipartFile file, int length, Date date, List<String> statuses, List<Image> images){
-        System.out.println("Received file: " + file.getOriginalFilename());
-        String gpxString = readGpxFile(file);
-        GpxData gpxData = GpxParser.parseGpx(gpxString);
-        List<Trkpt> positions = gpxData.getTrackPoints();
-        Ride ride = rideRepository.insert(new Ride(routeName,tripId,positions,length,date, statuses, images));
+    @Autowired
+    private AmazonS3Service amazonS3Service;
+    public Ride createRide(String routeName, String tripId, MultipartFile file, int length, Date date, List<String> statuses, MultipartFile[] images,  List<String> imageDescriptions, String location){
+        List<Trkpt> positions = new ArrayList<>();
+        if(file!=null){
+            String gpxString = readGpxFile(file);
+            GpxData gpxData = GpxParser.parseGpx(gpxString);
+            positions = gpxData.getTrackPoints();
+        }
+        else{
+            String[] parts = location.split(",");
+            double lat = Double.parseDouble(parts[0].trim());
+            double lon = Double.parseDouble(parts[1].trim());
+            Trkpt trkpt = new Trkpt();
+            trkpt.setLat(lat);
+            trkpt.setLon(lon);
+            positions.add(trkpt);
+        }
 
-        System.out.println("Bila vidila: ");
+        List<Image> uploadedImages = new ArrayList<>();
+        if(images != null) {
+           uploadedImages = uploadPhotos(images, imageDescriptions);
+        }
+        Ride ride = rideRepository.insert(new Ride(routeName,tripId,positions,length,date, statuses, uploadedImages));
+
         mongoTemplate.update(TripData.class)
                 .matching(Criteria.where("tripId").is(tripId))
                 .apply(new Update().push("rideIds").value(ride))
@@ -46,9 +65,47 @@ public class RideService {
             }
             return content.toString();
         } catch (IOException e) {
-            // Handle exception (e.g., file not found, unable to read)
             e.printStackTrace();
             return "Error reading GPX file";
         }
+    }
+
+    private List<Image> uploadPhotos(MultipartFile[] files, List<String> descriptions) {
+        List<Image> uploadedPhotos = new ArrayList<>();
+
+        for (int i = 0; i < files.length; i++) {
+            MultipartFile file = files[i];
+            String description = descriptions.get(i);
+
+            try {
+                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                Thumbnails.of(file.getInputStream())
+                        .size(200, 200)
+                        .outputQuality(1.0)
+                        .outputFormat("jpg")
+                        .toOutputStream(outputStream);
+
+                byte[] thumbnailBytes = outputStream.toByteArray();
+
+                MultipartFile thumbnailFile = new ByteArrayMultipartFile(
+                        thumbnailBytes,
+                        file.getOriginalFilename(),
+                        file.getOriginalFilename(),
+                        "image/jpeg"
+                );
+
+                String thumbnailUrl = amazonS3Service.uploadFile(thumbnailFile, "ImagesLQ");
+
+                String imageUrl = amazonS3Service.uploadFile(file, "ImagesHQ");
+
+                Image photo = new Image(imageUrl,thumbnailUrl, description);
+
+                uploadedPhotos.add(photo);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return uploadedPhotos;
     }
 }

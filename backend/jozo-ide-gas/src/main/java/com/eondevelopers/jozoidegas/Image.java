@@ -9,5 +9,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Image {
     private String src;
+    private String LQIPsrc;
     private String desc;
 }

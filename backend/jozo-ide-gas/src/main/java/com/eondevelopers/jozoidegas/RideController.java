@@ -1,14 +1,15 @@
 package com.eondevelopers.jozoidegas;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/rides")
@@ -17,13 +18,20 @@ public class RideController {
     private RideService rideService;
 
     @PostMapping
-    public ResponseEntity<Ride> createTrip(@RequestParam("file") MultipartFile file,
+    public ResponseEntity<Ride> createTrip(@RequestParam(value = "file", required = false) MultipartFile file,
                                            @RequestParam("routeName") String routeName,
                                            @RequestParam("tripId") String tripId,
                                            @RequestParam("length") int length,
-                                           @RequestParam("date") Date date,
+                                           @RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd")  Date date,
                                            @RequestParam("statuses") List<String> statuses,
-                                           @RequestParam("images") List<Image> images){
-        return new ResponseEntity<Ride>(rideService.createRide(routeName,tripId,file,length,date,statuses,images), HttpStatus.CREATED);
+                                           @RequestParam(value="images", required = false) MultipartFile[] images,
+                                           @RequestParam(value="imageDescriptions", required = false) List<String> imageDescriptions,
+                                           @RequestParam(value = "location", required = false) String location){
+        try {
+        return new ResponseEntity<Ride>(rideService.createRide(routeName,tripId,file,length,date,statuses,images,imageDescriptions, location), HttpStatus.CREATED);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }
