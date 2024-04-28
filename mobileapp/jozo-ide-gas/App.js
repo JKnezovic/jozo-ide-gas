@@ -2,7 +2,7 @@ import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import LiveLocationScreen from "./components/LiveLocationScreen";
-import PostRequestScreen from "./components/PostRequestScreen";
+import UploadDailyRideScreen from "./components/UploadDailyRideScreen";
 import { TouchableOpacity, StyleSheet, View, Text } from "react-native";
 
 const Stack = createStackNavigator();
@@ -13,7 +13,7 @@ export default function App() {
       <Stack.Navigator initialRouteName="Home">
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="LiveLocation" component={LiveLocationScreen} />
-        <Stack.Screen name="PostRequest" component={PostRequestScreen} />
+        <Stack.Screen name="UploadDailyRideScreen" component={UploadDailyRideScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -31,9 +31,9 @@ function HomeScreen({ navigation }) {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.homeButton}
-          onPress={() => navigation.navigate("PostRequest")}
+          onPress={() => navigation.navigate("UploadDailyRideScreen")}
         >
-          <Text style={styles.buttonText}>Post Requests</Text>
+          <Text style={styles.buttonText}>Upload Daily Route</Text>
         </TouchableOpacity>
       </View>
     </View>
