@@ -5,17 +5,21 @@ import TripList from "./TripList";
 import "./PastTrips.css";
 import api from "../../api/axiosConfig";
 import Loading from "../loading/Loading";
+import ErrorMessage from "../loading/ErrorMessage";
+
 const PastTrips = () => {
   const [tripData, setTripData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   const getTrips = async () => {
     try {
-      const response = await api.get("/api/v1/trips");
+      const response = await api.get("/api/v1/trips/done");
       setTripData(response.data);
       setLoading(false);
     } catch (err) {
       console.log(err);
+      setError(true);
       setLoading(false);
     }
   };
@@ -24,6 +28,8 @@ const PastTrips = () => {
   }, []);
   return loading ? (
     <Loading />
+  ) : error ? (
+    <ErrorMessage />
   ) : (
     <div>
       <Routes>

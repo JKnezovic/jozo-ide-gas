@@ -14,11 +14,11 @@ const Home = () => {
         <div className="home-text-section">
           <h1 className="primary-heading">JOZO IDE GAS</h1>
           <p className="primary-text">
-            Zaronite u svijet biciklističkih čuda s Jozom! Pratite ga na putovanjima biciklom kroz
-            Europu. Otkrijte ljepotu staza, kulture i nevjerojatne trenutke.
+            Join me and experience the thrill of exploration, the warmth of camaraderie, and the joy
+            of discovery on these unforgettable cycling escapades.
           </p>
           <Link to="/ongoing" className="secondary-button">
-            Započni{" "}
+            Start{" "}
           </Link>
         </div>
       </div>
