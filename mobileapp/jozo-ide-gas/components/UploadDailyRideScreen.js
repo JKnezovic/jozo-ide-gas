@@ -5,8 +5,8 @@ import * as DocumentPicker from "expo-document-picker";
 import api from "../api/axiosConfig";
 
 const UploadDailyRideScreen = () => {
-  const [routeName, setRouteName] = useState("Gata");
-  const [tripId, setTripId] = useState("Prevlaka");
+  const [routeName, setRouteName] = useState("");
+  const [tripId, setTripId] = useState("Nordkapp");
   const [length, setLength] = useState("0");
   const [date, setDate] = useState(new Date().toLocaleDateString("en-CA"));
   const [statuses, setStatuses] = useState(["", ""]);

@@ -4,6 +4,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import LiveLocationScreen from "./components/LiveLocationScreen";
 import UploadDailyRideScreen from "./components/UploadDailyRideScreen";
 import { TouchableOpacity, StyleSheet, View, Text } from "react-native";
+import DeleteRequestScreen from "./components/DeleteRequestScreen";
 
 const Stack = createStackNavigator();
 
@@ -13,7 +14,8 @@ export default function App() {
       <Stack.Navigator initialRouteName="Home">
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="LiveLocation" component={LiveLocationScreen} />
-        <Stack.Screen name="UploadDailyRideScreen" component={UploadDailyRideScreen} />
+        <Stack.Screen name="UploadDailyRide" component={UploadDailyRideScreen} />
+        <Stack.Screen name="DeleteRequest" component={DeleteRequestScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -31,9 +33,15 @@ function HomeScreen({ navigation }) {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.homeButton}
-          onPress={() => navigation.navigate("UploadDailyRideScreen")}
+          onPress={() => navigation.navigate("UploadDailyRide")}
         >
           <Text style={styles.buttonText}>Upload Daily Route</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.deleteButton}
+          onPress={() => navigation.navigate("DeleteRequest")}
+        >
+          <Text style={styles.buttonText}>Delete Daily Route</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -52,6 +60,13 @@ const styles = StyleSheet.create({
   },
   homeButton: {
     backgroundColor: "#efb30d",
+    borderRadius: 5,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    marginVertical: 10,
+  },
+  deleteButton: {
+    backgroundColor: "red",
     borderRadius: 5,
     paddingVertical: 10,
     paddingHorizontal: 20,
