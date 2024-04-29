@@ -16,7 +16,8 @@ import java.util.List;
 public class RideController {
     @Autowired
     private RideService rideService;
-
+    @Autowired
+    private AmazonS3Service amazonS3Service;
     @PostMapping
     public ResponseEntity<Ride> createTrip(@RequestParam(value = "file", required = false) MultipartFile file,
                                            @RequestParam("routeName") String routeName,
@@ -29,6 +30,24 @@ public class RideController {
                                            @RequestParam(value = "location", required = false) String location){
         try {
         return new ResponseEntity<Ride>(rideService.createRide(routeName,tripId,file,length,date,statuses,images,imageDescriptions, location), HttpStatus.CREATED);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteRide(@PathVariable String id) {
+        try {
+            Ride ride = rideService.getRideById(id);
+            List<Image> images = ride.getImages();
+
+            for (Image image : images) {
+                amazonS3Service.deleteImageFromS3(image.getSrc());
+                amazonS3Service.deleteImageFromS3(image.getLQIPsrc());
+            }
+            rideService.deleteRideById(id);
+            return ResponseEntity.noContent().build();
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

@@ -1,5 +1,7 @@
 package com.eondevelopers.jozoidegas;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,6 +18,7 @@ import java.util.List;
 @AllArgsConstructor
 public class Ride {
     @Id
+    @JsonSerialize(using= ToStringSerializer.class)
     private ObjectId id;
     private String routeName;
     private String tripId;

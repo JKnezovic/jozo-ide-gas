@@ -1,6 +1,7 @@
 package com.eondevelopers.jozoidegas;
 
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,6 +33,16 @@ public class AmazonS3Service {
         } catch (IOException e) {
             e.printStackTrace();
             return null;
+        }
+    }
+
+    public void deleteImageFromS3(String imageUrl) {
+        try {
+            String key = imageUrl.substring(imageUrl.indexOf("Images"));
+            amazonS3.deleteObject(new DeleteObjectRequest(bucketName, key));
+            System.out.println("Deleted image from S3: " + key);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

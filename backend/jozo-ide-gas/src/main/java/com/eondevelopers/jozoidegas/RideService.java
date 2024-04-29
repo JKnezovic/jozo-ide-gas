@@ -25,6 +25,10 @@ public class RideService {
     private MongoTemplate mongoTemplate;
     @Autowired
     private AmazonS3Service amazonS3Service;
+
+    public void deleteRideById(String id) {
+        rideRepository.deleteById(id);
+    }
     public Ride createRide(String routeName, String tripId, MultipartFile file, int length, Date date, List<String> statuses, MultipartFile[] images,  List<String> imageDescriptions, String location){
         List<Trkpt> positions = new ArrayList<>();
         if(file!=null){
@@ -107,5 +111,9 @@ public class RideService {
         }
 
         return uploadedPhotos;
+    }
+
+    public Ride getRideById(String id) {
+        return rideRepository.findById(id).orElse(null);
     }
 }
