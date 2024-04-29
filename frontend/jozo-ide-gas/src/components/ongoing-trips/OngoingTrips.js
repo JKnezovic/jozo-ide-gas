@@ -55,6 +55,7 @@ const OngoingTrips = () => {
           tripName={tripData.tripName}
           totalLength={tripData.totalLength}
           mapVisible={mapVisible}
+          liveLocation={true}
         />
         <div onClick={() => handleClick()} className="button-switch">
           {mapVisible ? "Show Timeline" : "Show on Map"}

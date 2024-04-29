@@ -13,7 +13,7 @@
   margin-left: 23px;
   justify-content: space-between;
   width: 87%;
-  border-bottom: 1px solid #b2b2b2;
+  /* border-bottom: 1px solid #b2b2b2; */
 }
 .route-name-heading {
   font-size: large;
@@ -166,6 +166,30 @@
   height: 104px;
   margin: 2px;
   border-radius: 10px;
+}
+
+.progress-km {
+  width: 88%;
+  margin-left: 24px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-top: 3px;
+  margin-bottom: 3px;
+}
+
+.percentage {
+  margin-bottom: 0;
+  font-size: small;
+  margin-left: 5px;
+  color: gray;
+}
+.progress {
+  width: 100%;
+}
+
+.progress-bar {
+  background-color: #6b92b2 !important;
 }
 
 @media (max-width: 800px) {

@@ -1,6 +1,7 @@
 import React from "react";
 import TimelineItem from "./TimelineItem";
 import "./Timeline.css";
+import { CProgressBar, CProgress } from "@coreui/react";
 const Timeline = ({
   rides,
   setSelectedRide,
@@ -9,10 +10,13 @@ const Timeline = ({
   tripName,
   totalLength,
   mapVisible,
+  liveLocation,
 }) => {
   const handleClick = (ride) => {
     setSelectedRide(ride);
   };
+
+  const kilometersDone = rides.map((ride) => ride.length).reduce((acc, val) => acc + val, 0);
 
   const timelineItems = rides
     .slice()
@@ -36,6 +40,21 @@ const Timeline = ({
         <h1 className="route-name-heading">{tripName}</h1>
         <div className="total-length">{totalLength + "km"}</div>
       </div>
+      {liveLocation && (
+        <div className="progress-km">
+          <CProgress height={7} color="6b92b2">
+            <CProgressBar
+              color="6b92b2"
+              value={(kilometersDone / totalLength) * 100}
+            ></CProgressBar>
+          </CProgress>
+          <p className="percentage">{`${kilometersDone}km(${(
+            (kilometersDone / totalLength) *
+            100
+          ).toFixed(1)}%)`}</p>
+        </div>
+      )}
+
       <div ref={scrollRef} className="trip-details">
         {timelineItems}
       </div>
