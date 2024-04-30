@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
 const Card = ({ tripName, totalLength, description, days, imageSource, date, tripId }) => {
-  console.log("tripid", tripId);
   return (
     <Link to={"/done/" + tripId} className="Link">
       <div className="past-trips-card">

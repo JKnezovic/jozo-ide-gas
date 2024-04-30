@@ -18,6 +18,8 @@ const Timeline = ({
 
   const kilometersDone = rides.map((ride) => ride.length).reduce((acc, val) => acc + val, 0);
 
+  const startDate = rides[0].date;
+
   const timelineItems = rides
     .slice()
     .reverse()
@@ -31,6 +33,7 @@ const Timeline = ({
           routeName={routeName}
           ride={ride}
           selectedRide={selectedRide}
+          startDate={startDate}
         />
       );
     });

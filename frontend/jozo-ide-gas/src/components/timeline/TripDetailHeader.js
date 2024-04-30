@@ -1,7 +1,6 @@
 import React from "react";
 import Moment from "moment";
-const TripDetailHeader = ({ length, date, routeName }) => {
-  const startDate = Moment("2023-08-20");
+const TripDetailHeader = ({ length, date, routeName, startDate }) => {
   const moment = Moment(date);
   const difference = moment.diff(startDate, "days") + 1;
   const label = length ? `${length}km` : "REST";
