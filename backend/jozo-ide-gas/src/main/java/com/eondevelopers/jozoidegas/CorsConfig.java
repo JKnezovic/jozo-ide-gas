@@ -7,16 +7,17 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
-@Configuration
+ @Configuration
 public class CorsConfig {
     @Bean
     public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.addAllowedOrigin("http://localhost:3000"); // Replace with your React app's URL
+        //config.addAllowedOrigin("http://localhost:3000");
+        config.addAllowedOrigin("https://jozo-ide-gas.com");
         config.addAllowedHeader("*");
-        config.addAllowedMethod("GET");
+        config.addAllowedMethod("*");
         source.registerCorsConfiguration("/api/**", config); // Replace with your API path
         return new CorsFilter(source);
     }
