@@ -22,6 +22,7 @@ public class RideController {
     private RideService rideService;
     @Autowired
     private AmazonS3Service amazonS3Service;
+
     @PostMapping
     public ResponseEntity<Ride> createTrip(@RequestParam(value = "file", required = false) MultipartFile file,
                                            @RequestParam("routeName") String routeName,
@@ -38,6 +39,46 @@ public class RideController {
         List<String> statuses = multiValueParam(request, "statuses");
         List<String> imageDescriptions = multiValueParam(request, "imageDescriptions");
         return new ResponseEntity<Ride>(rideService.createRide(routeName,tripId,file,length,date,statuses,images,imageDescriptions, location), HttpStatus.CREATED);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateRide(@PathVariable String id, @RequestBody RideUpdateRequest request) {
+        try {
+            Ride updated = rideService.updateRide(id, request);
+            if (updated == null) {
+                return ResponseEntity.notFound().build();
+            }
+            return ResponseEntity.ok(updated);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    /**
+     * Replaces a ride's track with a freshly uploaded GPX file. Separate from the JSON
+     * update because a file has to travel as multipart, and multipart form fields only
+     * parse reliably on POST.
+     */
+    @PostMapping(value = "/{id}/track", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> replaceTrack(@PathVariable String id,
+                                          @RequestParam("file") MultipartFile file) {
+        try {
+            Ride updated = rideService.replaceTrack(id, file);
+            if (updated == null) {
+                return ResponseEntity.notFound().build();
+            }
+            return ResponseEntity.ok(updated);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

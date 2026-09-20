@@ -5,6 +5,10 @@ import LiveLocationScreen from "./components/LiveLocationScreen";
 import UploadDailyRideScreen from "./components/UploadDailyRideScreen";
 import { TouchableOpacity, StyleSheet, View, Text } from "react-native";
 import DeleteRequestScreen from "./components/DeleteRequestScreen";
+import TripsScreen from "./components/TripsScreen";
+import TripFormScreen from "./components/TripFormScreen";
+import EditRoutesScreen from "./components/EditRoutesScreen";
+import EditRouteScreen from "./components/EditRouteScreen";
 
 const Stack = createStackNavigator();
 
@@ -16,6 +20,22 @@ export default function App() {
         <Stack.Screen name="LiveLocation" component={LiveLocationScreen} />
         <Stack.Screen name="UploadDailyRide" component={UploadDailyRideScreen} />
         <Stack.Screen name="DeleteRequest" component={DeleteRequestScreen} />
+        <Stack.Screen name="Trips" component={TripsScreen} options={{ title: "Trips" }} />
+        <Stack.Screen
+          name="TripForm"
+          component={TripFormScreen}
+          options={({ route }) => ({ title: route.params?.trip ? "Edit Trip" : "New Trip" })}
+        />
+        <Stack.Screen
+          name="EditRoutes"
+          component={EditRoutesScreen}
+          options={{ title: "Edit Daily Route" }}
+        />
+        <Stack.Screen
+          name="EditRoute"
+          component={EditRouteScreen}
+          options={({ route }) => ({ title: route.params?.ride?.routeName ?? "Edit Route" })}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -36,6 +56,15 @@ function HomeScreen({ navigation }) {
           onPress={() => navigation.navigate("UploadDailyRide")}
         >
           <Text style={styles.buttonText}>Upload Daily Route</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.homeButton}
+          onPress={() => navigation.navigate("EditRoutes")}
+        >
+          <Text style={styles.buttonText}>Edit Daily Route</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.homeButton} onPress={() => navigation.navigate("Trips")}>
+          <Text style={styles.buttonText}>Manage Trips</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.deleteButton}

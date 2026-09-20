@@ -88,6 +88,16 @@ Uploads also go to S3 in a single request rather than a multipart transfer, so a
 video over a weak connection can be slow enough to time out. Short clips are the safer
 shape here, especially uploading over carrier data mid-trip.
 
+## 8. Only one trip may be ongoing
+
+The new trip endpoints refuse to leave two trips in the `ongoing` state, because the
+website renders the first ongoing trip it receives and a second one would silently become
+invisible. If you have more than one ongoing trip in the database right now, the app will
+report a conflict the first time you try to start a new one - mark the stale one done from
+the Manage Trips screen and it clears.
+
+To backfill an older trip while a current one is running, create it with status DONE.
+
 ---
 
 ## Verification after deploying

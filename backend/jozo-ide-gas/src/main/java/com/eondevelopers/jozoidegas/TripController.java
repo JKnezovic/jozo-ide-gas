@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @RestController
@@ -24,5 +25,33 @@ public class TripController {
         return new ResponseEntity<Optional<List<TripData>>>(tripDataService.singleTrip(status),HttpStatus.OK);
     }
 
+    @PostMapping
+    public ResponseEntity<?> createTrip(@RequestBody TripRequest request) {
+        try {
+            return new ResponseEntity<>(tripDataService.create(request), HttpStatus.CREATED);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().build();
+        }
+    }
 
+    @PutMapping("/{tripId}")
+    public ResponseEntity<?> updateTrip(@PathVariable String tripId, @RequestBody TripRequest request) {
+        try {
+            return ResponseEntity.ok(tripDataService.update(tripId, request));
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().build();
+        }
+    }
 }

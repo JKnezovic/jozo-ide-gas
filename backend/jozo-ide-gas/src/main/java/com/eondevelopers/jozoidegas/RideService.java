@@ -12,6 +12,9 @@ import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -48,21 +51,7 @@ public class RideService {
         rideRepository.deleteById(id);
     }
     public Ride createRide(String routeName, String tripId, MultipartFile file, int length, Date date, List<String> statuses, MultipartFile[] images,  List<String> imageDescriptions, String location){
-        List<Trkpt> positions = new ArrayList<>();
-        if(file!=null){
-            String gpxString = readGpxFile(file);
-            GpxData gpxData = GpxParser.parseGpx(gpxString);
-            positions = gpxData.getTrackPoints();
-        }
-        else{
-            String[] parts = location.split(",");
-            double lat = Double.parseDouble(parts[0].trim());
-            double lon = Double.parseDouble(parts[1].trim());
-            Trkpt trkpt = new Trkpt();
-            trkpt.setLat(lat);
-            trkpt.setLon(lon);
-            positions.add(trkpt);
-        }
+        List<Trkpt> positions = file != null ? positionsFromGpx(file) : positionsFromLocation(location);
 
         List<Image> uploadedImages = new ArrayList<>();
         if(images != null) {
@@ -76,6 +65,107 @@ public class RideService {
                 .first();
 
         return ride;
+    }
+
+    /**
+     * Applies the fields the caller actually sent. Media is left alone apart from its
+     * descriptions - adding or removing photos is what create and delete are for.
+     */
+    public Ride updateRide(String id, RideUpdateRequest request) {
+        Ride ride = getRideById(id);
+        if (ride == null) {
+            return null;
+        }
+
+        if (request.getRouteName() != null && !request.getRouteName().isBlank()) {
+            ride.setRouteName(request.getRouteName());
+        }
+        if (request.getLength() != null) {
+            ride.setLength(request.getLength());
+        }
+        if (request.getDate() != null && !request.getDate().isBlank()) {
+            ride.setDate(parseDate(request.getDate()));
+        }
+        if (request.getStatuses() != null) {
+            ride.setStatuses(request.getStatuses());
+        }
+        if (request.getLocation() != null && !request.getLocation().isBlank()) {
+            ride.setPositions(positionsFromLocation(request.getLocation()));
+        }
+        if (request.getMediaDescriptions() != null) {
+            applyDescriptions(ride, request.getMediaDescriptions());
+        }
+
+        return rideRepository.save(ride);
+    }
+
+    /** Swaps in a new GPX track, leaving everything else about the ride untouched. */
+    public Ride replaceTrack(String id, MultipartFile file) {
+        Ride ride = getRideById(id);
+        if (ride == null) {
+            return null;
+        }
+        if (file == null || file.isEmpty()) {
+            throw new IllegalArgumentException("A GPX file is required");
+        }
+        ride.setPositions(positionsFromGpx(file));
+        return rideRepository.save(ride);
+    }
+
+    /**
+     * Parsed with the server's timezone rather than Jackson's UTC default, so an edited
+     * date lands on the same day the create endpoint would have stored.
+     */
+    private Date parseDate(String date) {
+        try {
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            format.setLenient(false);
+            return format.parse(date.trim());
+        } catch (ParseException e) {
+            throw new IllegalArgumentException("Date must look like yyyy-MM-dd");
+        }
+    }
+
+    /** Descriptions line up with the stored media by position; extras are ignored. */
+    private void applyDescriptions(Ride ride, List<String> descriptions) {
+        List<Image> media = ride.getImages();
+        if (media == null) {
+            return;
+        }
+        for (int i = 0; i < media.size() && i < descriptions.size(); i++) {
+            media.get(i).setDesc(descriptions.get(i));
+        }
+    }
+
+    private List<Trkpt> positionsFromGpx(MultipartFile file) {
+        String gpxString = readGpxFile(file);
+        GpxData gpxData = GpxParser.parseGpx(gpxString);
+        List<Trkpt> trackPoints = gpxData == null ? null : gpxData.getTrackPoints();
+        if (trackPoints == null || trackPoints.isEmpty()) {
+            throw new IllegalArgumentException("No track points could be read from that GPX file");
+        }
+        return trackPoints;
+    }
+
+    /** A rest day has no track, just the single point the day was spent at. */
+    private List<Trkpt> positionsFromLocation(String location) {
+        if (location == null || location.isBlank()) {
+            throw new IllegalArgumentException("A GPX file or a location is required");
+        }
+        String[] parts = location.split(",");
+        if (parts.length != 2) {
+            throw new IllegalArgumentException("Location must look like 'latitude, longitude'");
+        }
+        try {
+            Trkpt trkpt = new Trkpt();
+            trkpt.setLat(Double.parseDouble(parts[0].trim()));
+            trkpt.setLon(Double.parseDouble(parts[1].trim()));
+            List<Trkpt> positions = new ArrayList<>();
+            positions.add(trkpt);
+            return positions;
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Location must be two numbers, like '45.815, 15.982'");
+        }
     }
 
     private String readGpxFile(MultipartFile file) {
