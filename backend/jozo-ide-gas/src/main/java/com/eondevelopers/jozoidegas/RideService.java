@@ -79,7 +79,7 @@ public class RideService {
 
         for (int i = 0; i < files.length; i++) {
             MultipartFile file = files[i];
-            String description = descriptions.get(i);
+            String description = (descriptions != null && i < descriptions.size()) ? descriptions.get(i) : "";
 
             try {
                 ByteArrayOutputStream outputStream = new ByteArrayOutputStream();

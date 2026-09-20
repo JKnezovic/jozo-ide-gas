@@ -59,8 +59,11 @@ const UploadDailyRideScreen = () => {
       formData.append("tripId", tripId);
       formData.append("length", length);
       formData.append("date", date);
-      formData.append("statuses", statuses);
-      formData.append("imageDescriptions", imageDescriptions);
+      // Append one part per entry. Passing the arrays straight to FormData would
+      // stringify them into a single comma-joined field, which the server then has to
+      // split back apart - losing any text that itself contains a comma.
+      statuses.forEach((status) => formData.append("statuses", status));
+      images.forEach((_, index) => formData.append("imageDescriptions", imageDescriptions[index] ?? ""));
 
       if (file) {
         formData.append("file", {

@@ -8,6 +8,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import jakarta.servlet.http.HttpServletRequest;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -24,16 +28,28 @@ public class RideController {
                                            @RequestParam("tripId") String tripId,
                                            @RequestParam("length") int length,
                                            @RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd")  Date date,
-                                           @RequestParam("statuses") List<String> statuses,
                                            @RequestParam(value="images", required = false) MultipartFile[] images,
-                                           @RequestParam(value="imageDescriptions", required = false) List<String> imageDescriptions,
-                                           @RequestParam(value = "location", required = false) String location){
+                                           @RequestParam(value = "location", required = false) String location,
+                                           HttpServletRequest request){
         try {
+        List<String> statuses = multiValueParam(request, "statuses");
+        List<String> imageDescriptions = multiValueParam(request, "imageDescriptions");
         return new ResponseEntity<Ride>(rideService.createRide(routeName,tripId,file,length,date,statuses,images,imageDescriptions, location), HttpStatus.CREATED);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    /**
+     * Reads a repeated form field verbatim. Binding these through @RequestParam List<String>
+     * is unsafe: when the field is sent exactly once Spring hands the converter a single
+     * String and it splits that value on commas, so any status or description containing a
+     * comma gets chopped and every later entry shifts onto the wrong image.
+     */
+    private List<String> multiValueParam(HttpServletRequest request, String name) {
+        String[] values = request.getParameterValues(name);
+        return values == null ? new ArrayList<>() : Arrays.asList(values);
     }
 
     @DeleteMapping("/{id}")
