@@ -18,7 +18,7 @@ const Timeline = ({
 
   const kilometersDone = rides.map((ride) => ride.length).reduce((acc, val) => acc + val, 0);
 
-  const startDate = rides[0].date;
+  const startDate = rides.length ? rides[0].date : null;
 
   const timelineItems = rides
     .slice()

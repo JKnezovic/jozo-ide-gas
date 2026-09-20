@@ -5,23 +5,30 @@ import Timeline from "../timeline/Timeline";
 import "../ongoing-trips/OngoingTrips.css";
 import { useParams } from "react-router-dom";
 import Loading from "../loading/Loading";
+import ErrorMessage from "../loading/ErrorMessage";
 const TripDetails = ({ tripData }) => {
   const [selectedRide, setSelectedRide] = useState(null);
-  const [trip, setTrip] = useState(tripData[0]);
+  const [trip, setTrip] = useState(null);
+  const [notFound, setNotFound] = useState(false);
   const scrollRef = useRef(null);
   const { tripName } = useParams();
   const [mapVisible, setMapVisible] = useState(true);
 
   useEffect(() => {
-    const trip = tripData.find((trip) => trip.tripId === tripName);
-    const rides = trip.rideIds;
-    setTrip(trip);
-    setSelectedRide(rides[rides.length - 1]);
+    // A hand-typed or stale /done/:tripId matches nothing, and a trip can exist with no
+    // rides recorded yet - neither should take the page down.
+    const match = tripData.find((item) => item.tripId === tripName);
+    const rides = match?.rideIds ?? [];
+    setNotFound(!match || rides.length === 0);
+    setTrip(match ?? null);
+    setSelectedRide(rides.length ? rides[rides.length - 1] : null);
   }, [tripData, tripName]);
   const handleClick = () => {
     setMapVisible(!mapVisible);
   };
-  return !selectedRide ? (
+  if (notFound) return <ErrorMessage />;
+
+  return !trip || !selectedRide ? (
     <Loading />
   ) : (
     <div className="ongoing-trip-container">

@@ -2,6 +2,8 @@ package com.eondevelopers.jozoidegas;
 
 
 import net.coobird.thumbnailator.Thumbnails;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.bson.types.ObjectId;
@@ -20,6 +22,9 @@ import java.util.List;
 
 @Service
 public class RideService {
+
+    private static final Logger log = LoggerFactory.getLogger(RideService.class);
+
     @Autowired
     private RideRepository rideRepository;
     @Autowired
@@ -95,38 +100,53 @@ public class RideService {
             String description = (descriptions != null && i < descriptions.size()) ? descriptions.get(i) : "";
 
             try {
-                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-                Thumbnails.of(file.getInputStream())
-                        .size(200, 200)
-                        .outputQuality(1.0)
-                        .outputFormat("jpg")
-                        .toOutputStream(outputStream);
-
-                byte[] thumbnailBytes = outputStream.toByteArray();
-
-                String originalName = file.getOriginalFilename();
-                String thumbnailName = (originalName == null ? "thumbnail" : originalName.replaceAll("\\.[^.]*$", "")) + ".jpg";
-
-                MultipartFile thumbnailFile = new ByteArrayMultipartFile(
-                        thumbnailBytes,
-                        thumbnailName,
-                        thumbnailName,
-                        "image/jpeg"
-                );
-
-                String thumbnailUrl = amazonS3Service.uploadFile(thumbnailFile, "ImagesLQ");
-
                 String imageUrl = amazonS3Service.uploadFile(file, "ImagesHQ");
+                if (imageUrl == null) {
+                    log.error("Upload failed for photo {} - leaving it off the ride", file.getOriginalFilename());
+                    continue;
+                }
 
-                Image photo = new Image(imageUrl,thumbnailUrl, description);
+                // A thumbnail that cannot be generated costs page-load speed, not the photo:
+                // fall back to the full image rather than dropping the photo silently.
+                String thumbnailUrl = uploadThumbnail(file);
+                if (thumbnailUrl == null) {
+                    log.warn("No thumbnail for photo {} - falling back to the full image", file.getOriginalFilename());
+                    thumbnailUrl = imageUrl;
+                }
 
-                uploadedPhotos.add(photo);
-            } catch (IOException e) {
-                e.printStackTrace();
+                uploadedPhotos.add(new Image(imageUrl, thumbnailUrl, description));
+            } catch (Exception e) {
+                log.error("Could not attach photo {} to the ride", file.getOriginalFilename(), e);
             }
         }
 
         return uploadedPhotos;
+    }
+
+    /** Returns the uploaded thumbnail url, or null if one could not be produced. */
+    private String uploadThumbnail(MultipartFile file) {
+        try {
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            Thumbnails.of(file.getInputStream())
+                    .size(200, 200)
+                    .outputQuality(1.0)
+                    .outputFormat("jpg")
+                    .toOutputStream(outputStream);
+
+            String originalName = file.getOriginalFilename();
+            String thumbnailName = (originalName == null ? "thumbnail" : originalName.replaceAll("\\.[^.]*$", "")) + ".jpg";
+
+            MultipartFile thumbnailFile = new ByteArrayMultipartFile(
+                    outputStream.toByteArray(),
+                    thumbnailName,
+                    thumbnailName,
+                    "image/jpeg");
+
+            return amazonS3Service.uploadFile(thumbnailFile, "ImagesLQ");
+        } catch (Exception e) {
+            log.warn("Thumbnail generation failed for {}", file.getOriginalFilename(), e);
+            return null;
+        }
     }
 
     public Ride getRideById(String id) {

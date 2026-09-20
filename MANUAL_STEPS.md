@@ -59,8 +59,9 @@ The backend URL is no longer hardcoded in `src/api/axiosConfig.js`. It now comes
 
 The production value is identical to what was hardcoded, so nothing changes behaviourally,
 but Create React App bakes these in **at build time**: the site must be rebuilt and
-redeployed to pick the variable up. The `build/` folder committed in the repo is stale
-until you re-run `npm run build`.
+redeployed to pick the variable up. A production build was run locally to verify the URL
+is embedded correctly, but `build/` is gitignored, so re-run `npm run build` on the
+machine you deploy from and upload the result as usual.
 
 If the backend ever moves, edit `.env.production` rather than the source. Neither file is
 gitignored and neither holds a secret - only `.env*.local` is ignored, per CRA convention.

@@ -15,7 +15,7 @@ let DefaultIcon = L.icon({
 });
 const Map = ({ tripData, setSelectedRide, selectedRide, scrollRef, liveLocation, mapVisible }) => {
   const mapRef = useRef(null);
-  const [liveLoaction, setLiveLocation] = useState({ latLng: [53, 19] });
+  const [currentLocation, setCurrentLocation] = useState({ latLng: [53, 19] });
   const [updatedAt, setUpdatedAt] = useState("");
   useEffect(() => {
     if (mapRef.current && selectedRide) {
@@ -24,13 +24,16 @@ const Map = ({ tripData, setSelectedRide, selectedRide, scrollRef, liveLocation,
   }, [selectedRide]);
 
   useEffect(() => {
-    getLiveLocation();
-  }, []);
+    // Past trips have no live position to show, so there is nothing to fetch.
+    if (liveLocation) {
+      getLiveLocation();
+    }
+  }, [liveLocation]);
 
   const getLiveLocation = async () => {
     try {
       const response = await api.get("/api/v1/live-location");
-      setLiveLocation(response.data);
+      setCurrentLocation(response.data);
       const time = Moment(response.data.updatedAt).format("dddd, MMMM DD, YYYY HH:mm");
       setUpdatedAt(time);
     } catch (err) {
@@ -60,11 +63,11 @@ const Map = ({ tripData, setSelectedRide, selectedRide, scrollRef, liveLocation,
           <CurrentlyCycling
             updatedAt={updatedAt}
             mapRef={mapRef.current}
-            position={liveLoaction.latLng}
+            position={currentLocation.latLng}
           />
         )}
         {liveLocation && (
-          <Marker position={liveLoaction.latLng} icon={DefaultIcon}>
+          <Marker position={currentLocation.latLng} icon={DefaultIcon}>
             <Popup>{"Updated at " + updatedAt}</Popup>
           </Marker>
         )}
