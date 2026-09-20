@@ -211,3 +211,34 @@
     height: 90px;
   }
 }
+
+.video-badge {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 34px;
+  height: 34px;
+  padding-left: 3px;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.55);
+  color: rgba(255, 255, 255, 0.95);
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.video-stage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.video-player {
+  max-width: 90vw;
+  max-height: 85vh;
+  border-radius: 6px;
+  background-color: #000;
+}

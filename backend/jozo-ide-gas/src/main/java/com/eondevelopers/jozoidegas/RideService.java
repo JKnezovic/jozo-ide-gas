@@ -66,7 +66,7 @@ public class RideService {
 
         List<Image> uploadedImages = new ArrayList<>();
         if(images != null) {
-           uploadedImages = uploadPhotos(images, imageDescriptions);
+           uploadedImages = uploadMedia(images, imageDescriptions);
         }
         Ride ride = rideRepository.insert(new Ride(routeName,tripId,positions,length,date, statuses, uploadedImages));
 
@@ -92,35 +92,59 @@ public class RideService {
         }
     }
 
-    private List<Image> uploadPhotos(MultipartFile[] files, List<String> descriptions) {
-        List<Image> uploadedPhotos = new ArrayList<>();
+    private List<Image> uploadMedia(MultipartFile[] files, List<String> descriptions) {
+        List<Image> uploadedMedia = new ArrayList<>();
 
         for (int i = 0; i < files.length; i++) {
             MultipartFile file = files[i];
             String description = (descriptions != null && i < descriptions.size()) ? descriptions.get(i) : "";
 
             try {
-                String imageUrl = amazonS3Service.uploadFile(file, "ImagesHQ");
-                if (imageUrl == null) {
-                    log.error("Upload failed for photo {} - leaving it off the ride", file.getOriginalFilename());
-                    continue;
-                }
-
-                // A thumbnail that cannot be generated costs page-load speed, not the photo:
-                // fall back to the full image rather than dropping the photo silently.
-                String thumbnailUrl = uploadThumbnail(file);
-                if (thumbnailUrl == null) {
-                    log.warn("No thumbnail for photo {} - falling back to the full image", file.getOriginalFilename());
-                    thumbnailUrl = imageUrl;
-                }
-
-                uploadedPhotos.add(new Image(imageUrl, thumbnailUrl, description));
+                uploadedMedia.add(isVideo(file) ? uploadVideo(file, description) : uploadPhoto(file, description));
             } catch (Exception e) {
-                log.error("Could not attach photo {} to the ride", file.getOriginalFilename(), e);
+                log.error("Could not attach {} to the ride", file.getOriginalFilename(), e);
             }
         }
 
-        return uploadedPhotos;
+        uploadedMedia.removeIf(java.util.Objects::isNull);
+        return uploadedMedia;
+    }
+
+    private boolean isVideo(MultipartFile file) {
+        String contentType = file.getContentType();
+        return contentType != null && contentType.toLowerCase().startsWith("video/");
+    }
+
+    /**
+     * Videos are stored as-is. Producing a poster frame would mean running ffmpeg on the
+     * server, so the site renders the first frame from the video element instead and this
+     * leaves LQIPsrc null.
+     */
+    private Image uploadVideo(MultipartFile file, String description) {
+        String videoUrl = amazonS3Service.uploadFile(file, "VideosHQ");
+        if (videoUrl == null) {
+            log.error("Upload failed for video {} - leaving it off the ride", file.getOriginalFilename());
+            return null;
+        }
+        return new Image(videoUrl, null, description, Image.TYPE_VIDEO);
+    }
+
+    private Image uploadPhoto(MultipartFile file, String description) {
+        String imageUrl = amazonS3Service.uploadFile(file, "ImagesHQ");
+        if (imageUrl == null) {
+            log.error("Upload failed for photo {} - leaving it off the ride", file.getOriginalFilename());
+            return null;
+        }
+
+        // A thumbnail that cannot be generated costs page-load speed, not the photo:
+        // fall back to the full image rather than dropping the photo silently.
+        String thumbnailUrl = uploadThumbnail(file);
+        if (thumbnailUrl == null) {
+            log.warn("No thumbnail for photo {} - falling back to the full image", file.getOriginalFilename());
+            thumbnailUrl = imageUrl;
+        }
+
+        return new Image(imageUrl, thumbnailUrl, description, Image.TYPE_IMAGE);
     }
 
     /** Returns the uploaded thumbnail url, or null if one could not be produced. */

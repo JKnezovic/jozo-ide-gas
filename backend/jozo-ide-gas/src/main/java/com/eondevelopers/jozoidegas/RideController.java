@@ -65,8 +65,11 @@ public class RideController {
             List<Image> images = ride.getImages() == null ? List.of() : ride.getImages();
 
             for (Image image : images) {
-                amazonS3Service.deleteImageFromS3(image.getSrc());
-                amazonS3Service.deleteImageFromS3(image.getLQIPsrc());
+                amazonS3Service.deleteFromS3(image.getSrc());
+                // Videos have no separate poster, so this is null for them.
+                if (image.getLQIPsrc() != null && !image.getLQIPsrc().equals(image.getSrc())) {
+                    amazonS3Service.deleteFromS3(image.getLQIPsrc());
+                }
             }
             rideService.deleteRideById(id);
             return ResponseEntity.noContent().build();

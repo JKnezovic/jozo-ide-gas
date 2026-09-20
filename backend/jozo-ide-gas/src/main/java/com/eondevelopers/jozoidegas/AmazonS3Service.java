@@ -9,6 +9,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,17 +54,43 @@ public class AmazonS3Service {
         return UUID.randomUUID() + (cleaned.isEmpty() ? "" : "-" + cleaned);
     }
 
-    public void deleteImageFromS3(String imageUrl) {
-        if (imageUrl == null || !imageUrl.contains("Images")) {
-            log.warn("Skipping S3 delete for unusable url: {}", imageUrl);
+    public void deleteFromS3(String fileUrl) {
+        String key = keyFromUrl(fileUrl);
+        if (key == null) {
+            log.warn("Skipping S3 delete for unusable url: {}", fileUrl);
             return;
         }
         try {
-            String key = imageUrl.substring(imageUrl.indexOf("Images"));
             amazonS3.deleteObject(new DeleteObjectRequest(bucketName, key));
-            System.out.println("Deleted image from S3: " + key);
+            log.info("Deleted {} from S3", key);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Failed to delete {} from S3", key, e);
+        }
+    }
+
+    /**
+     * Pulls the object key back out of a stored url. Reading the path rather than searching
+     * for a known folder name keeps this working for any prefix - videos live under a
+     * different one than images - and undoes the percent-encoding the url carries.
+     */
+    private String keyFromUrl(String fileUrl) {
+        if (fileUrl == null || fileUrl.isBlank()) {
+            return null;
+        }
+        try {
+            String path = URI.create(fileUrl).getPath();
+            if (path == null || path.length() <= 1) {
+                return null;
+            }
+            String key = URLDecoder.decode(path.substring(1), StandardCharsets.UTF_8);
+            // Path-style urls put the bucket in front of the key; virtual-hosted ones do not.
+            if (key.startsWith(bucketName + "/")) {
+                key = key.substring(bucketName.length() + 1);
+            }
+            return key.isBlank() ? null : key;
+        } catch (Exception e) {
+            log.warn("Could not read an S3 key out of {}", fileUrl, e);
+            return null;
         }
     }
 }

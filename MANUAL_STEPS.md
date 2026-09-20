@@ -69,6 +69,25 @@ gitignored and neither holds a secret - only `.env*.local` is ignored, per CRA c
 The mobile app works the same way via `JOZO_API_BASE_URL`, which defaults to the live URL
 when unset, so you only need it to point a local build at your own machine.
 
+## 6. Let the bucket serve videos publicly  — REQUIRED for video
+
+Videos are stored under a new `VideosHQ/` prefix, alongside the existing `ImagesHQ/` and
+`ImagesLQ/`. If the bucket policy grants public read per prefix rather than bucket-wide,
+`VideosHQ/*` needs the same grant or every video will load as a 403 while photos keep
+working. Check the bucket policy before concluding a video upload failed.
+
+## 7. Check disk headroom on EC2 for large uploads
+
+The upload limit moved from 200MB to 1GB per file (`application.properties`), because
+phone video blows straight past 200MB. Spring buffers anything over 2KB to a temp file on
+disk, so a 1GB upload needs ~1GB of free space on the instance while it is in flight. If
+the instance has a small root volume, either keep videos short or lower
+`spring.servlet.multipart.max-file-size` to something the disk can absorb.
+
+Uploads also go to S3 in a single request rather than a multipart transfer, so a very large
+video over a weak connection can be slow enough to time out. Short clips are the safer
+shape here, especially uploading over carrier data mid-trip.
+
 ---
 
 ## Verification after deploying
@@ -86,6 +105,14 @@ curl -i -X DELETE -H "X-Api-Key: <the key>" \
 ```
 
 A `503` on steps 2–3 means the server has no `API_KEY` set — step 1 didn't take.
+
+### Check video playback end to end
+
+Upload one short clip from the app, then open the trip on the website. The timeline tile
+should show the first frame with a play badge, and clicking it should open a player. If the
+tile is black and the player shows nothing, open the video url directly - a 403 means step
+6, and a download prompt instead of playback means the object was stored with the wrong
+content type.
 
 ### Check the ride-delete fix against real data
 

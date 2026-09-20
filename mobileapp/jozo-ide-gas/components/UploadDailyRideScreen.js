@@ -24,7 +24,7 @@ const UploadDailyRideScreen = () => {
     }
 
     let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
       quality: 0.5,
       allowsMultipleSelection: true,
     });
@@ -35,6 +35,15 @@ const UploadDailyRideScreen = () => {
       setImages([...images, ...result.assets]);
     }
   };
+
+  const isVideo = (asset) =>
+    asset.type === "video" || (asset.mimeType ?? "").startsWith("video/");
+
+  // The server decides image vs video from the part's content type, so it has to be right.
+  const mimeTypeOf = (asset) => asset.mimeType ?? (isVideo(asset) ? "video/mp4" : "image/jpeg");
+
+  const fileNameOf = (asset, index) =>
+    asset.fileName ?? `media-${index + 1}.${isVideo(asset) ? "mp4" : "jpg"}`;
 
   const handleImageDescriptionChange = (text, index) => {
     setImageDescriptions((prevDescriptions) => {
@@ -98,8 +107,8 @@ const UploadDailyRideScreen = () => {
         formData.append("images", {
           uri: image.uri,
           // iOS frequently hands back an asset with no fileName at all.
-          name: image.fileName ?? `photo-${index + 1}.jpg`,
-          type: "image/jpeg",
+          name: fileNameOf(image, index),
+          type: mimeTypeOf(image),
         });
       });
 
@@ -168,14 +177,25 @@ const UploadDailyRideScreen = () => {
           {selectedFileName ? "Selected File: " + selectedFileName : "No file selected"}
         </Text>
         {selectedFileName ? <Button title="Clear File" onPress={clearFile} /> : null}
-        <Button title="Select Image" onPress={selectImage} />
+        <Button title="Select Photos / Videos" onPress={selectImage} />
         <View style={styles.containerDesc}>
           {images.map((image, index) => (
             <View key={index} style={styles.imageContainer}>
-              <Image source={{ uri: image.uri }} style={{ width: 100, height: 100 }} />
+              {isVideo(image) ? (
+                <View style={styles.videoPlaceholder}>
+                  <Text style={styles.videoPlaceholderText}>VIDEO</Text>
+                  {image.duration ? (
+                    <Text style={styles.videoDuration}>
+                      {Math.round(image.duration / 1000) + "s"}
+                    </Text>
+                  ) : null}
+                </View>
+              ) : (
+                <Image source={{ uri: image.uri }} style={{ width: 100, height: 100 }} />
+              )}
               <TextInput
                 style={[styles.imageInput]}
-                placeholder="Image Description"
+                placeholder={isVideo(image) ? "Video Description" : "Image Description"}
                 multiline={true}
                 value={imageDescriptions[index]}
                 onChangeText={(text) => handleImageDescriptionChange(text, index)}
@@ -225,6 +245,24 @@ const styles = StyleSheet.create({
   fileName: {
     marginVertical: 10,
     color: "gray",
+  },
+  videoPlaceholder: {
+    width: 100,
+    height: 100,
+    backgroundColor: "#3a3347",
+    borderRadius: 5,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  videoPlaceholderText: {
+    color: "#efb30d",
+    fontWeight: "700",
+    letterSpacing: 1,
+  },
+  videoDuration: {
+    color: "#cccccc",
+    fontSize: 12,
+    marginTop: 4,
   },
 });
 
