@@ -75,10 +75,11 @@ const UploadDailyRideScreen = () => {
         formData.append("location", location);
       }
 
-      images.forEach((image) => {
+      images.forEach((image, index) => {
         formData.append("images", {
           uri: image.uri,
-          name: image.fileName,
+          // iOS frequently hands back an asset with no fileName at all.
+          name: image.fileName ?? `photo-${index + 1}.jpg`,
           type: "image/jpeg",
         });
       });

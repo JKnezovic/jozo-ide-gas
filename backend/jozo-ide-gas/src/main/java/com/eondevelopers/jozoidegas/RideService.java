@@ -4,6 +4,7 @@ package com.eondevelopers.jozoidegas;
 import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
@@ -26,7 +27,19 @@ public class RideService {
     @Autowired
     private AmazonS3Service amazonS3Service;
 
+    /**
+     * Removes the ride and the trip's reference to it. Dropping only the ride document would
+     * leave a dangling @DocumentReference behind in TripData.rideIds. The trip's totalLength
+     * is deliberately untouched - it is the planned distance, not the sum of the rides.
+     */
     public void deleteRideById(String id) {
+        Ride ride = getRideById(id);
+        if (ride != null) {
+            mongoTemplate.update(TripData.class)
+                    .matching(Criteria.where("tripId").is(ride.getTripId()))
+                    .apply(new Update().pull("rideIds", new ObjectId(id)))
+                    .first();
+        }
         rideRepository.deleteById(id);
     }
     public Ride createRide(String routeName, String tripId, MultipartFile file, int length, Date date, List<String> statuses, MultipartFile[] images,  List<String> imageDescriptions, String location){
@@ -91,10 +104,13 @@ public class RideService {
 
                 byte[] thumbnailBytes = outputStream.toByteArray();
 
+                String originalName = file.getOriginalFilename();
+                String thumbnailName = (originalName == null ? "thumbnail" : originalName.replaceAll("\\.[^.]*$", "")) + ".jpg";
+
                 MultipartFile thumbnailFile = new ByteArrayMultipartFile(
                         thumbnailBytes,
-                        file.getOriginalFilename(),
-                        file.getOriginalFilename(),
+                        thumbnailName,
+                        thumbnailName,
                         "image/jpeg"
                 );
 

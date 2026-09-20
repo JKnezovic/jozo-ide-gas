@@ -56,7 +56,10 @@ public class RideController {
     public ResponseEntity<Void> deleteRide(@PathVariable String id) {
         try {
             Ride ride = rideService.getRideById(id);
-            List<Image> images = ride.getImages();
+            if (ride == null) {
+                return ResponseEntity.notFound().build();
+            }
+            List<Image> images = ride.getImages() == null ? List.of() : ride.getImages();
 
             for (Image image : images) {
                 amazonS3Service.deleteImageFromS3(image.getSrc());
