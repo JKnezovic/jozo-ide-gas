@@ -46,13 +46,32 @@ const UploadDailyRideScreen = () => {
 
   const selectFile = async () => {
     let result = await DocumentPicker.getDocumentAsync();
-    if (!result.cancelled) {
-      setFile(result);
-      setSelectedFileName(result.assets[0].name);
+    if (result.canceled || !result.assets?.length) {
+      return;
     }
+    setFile(result);
+    setSelectedFileName(result.assets[0].name);
+  };
+
+  const clearFile = () => {
+    setFile(null);
+    setSelectedFileName("");
   };
 
   const handleSubmit = async () => {
+    // A ride needs a shape on the map: either a GPX track or a single point. Without one
+    // the server has nothing to place the day at and the upload fails after the photos
+    // have already been sent.
+    const trimmedLocation = location.trim();
+    if (!file && !trimmedLocation) {
+      Alert.alert("Location required", 'Pick a GPX file, or enter a location as "latitude, longitude".');
+      return;
+    }
+    if (!file && !/^-?[0-9]{1,3}([.][0-9]+)?[ ]*,[ ]*-?[0-9]{1,3}([.][0-9]+)?$/.test(trimmedLocation)) {
+      Alert.alert("Check the location", 'Enter two numbers separated by a comma, for example "45.815, 15.982".');
+      return;
+    }
+
     try {
       const formData = new FormData();
       formData.append("routeName", routeName);
@@ -72,7 +91,7 @@ const UploadDailyRideScreen = () => {
           type: file.assets[0].mimeType,
         });
       } else {
-        formData.append("location", location);
+        formData.append("location", trimmedLocation);
       }
 
       images.forEach((image, index) => {
@@ -139,12 +158,16 @@ const UploadDailyRideScreen = () => {
         />
         <TextInput
           style={styles.input}
-          placeholder="Location"
+          placeholder={file ? "Location (using GPX file)" : "Location - e.g. 45.815, 15.982"}
           value={location}
           onChangeText={setLocation}
+          editable={!file}
         />
         <Button title="Select File" onPress={selectFile} />
-        <Text style={styles.fileName}>{"Selected File: " + selectedFileName}</Text>
+        <Text style={styles.fileName}>
+          {selectedFileName ? "Selected File: " + selectedFileName : "No file selected"}
+        </Text>
+        {selectedFileName ? <Button title="Clear File" onPress={clearFile} /> : null}
         <Button title="Select Image" onPress={selectImage} />
         <View style={styles.containerDesc}>
           {images.map((image, index) => (

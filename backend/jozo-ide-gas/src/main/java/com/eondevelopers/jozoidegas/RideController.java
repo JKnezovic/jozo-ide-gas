@@ -31,6 +31,9 @@ public class RideController {
                                            @RequestParam(value="images", required = false) MultipartFile[] images,
                                            @RequestParam(value = "location", required = false) String location,
                                            HttpServletRequest request){
+        if (file == null && (location == null || location.isBlank())) {
+            return ResponseEntity.badRequest().build();
+        }
         try {
         List<String> statuses = multiValueParam(request, "statuses");
         List<String> imageDescriptions = multiValueParam(request, "imageDescriptions");

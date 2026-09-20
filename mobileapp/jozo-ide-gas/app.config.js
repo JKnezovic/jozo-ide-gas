@@ -5,5 +5,6 @@ export default ({ config }) => ({
   extra: {
     ...config.extra,
     apiKey: process.env.JOZO_API_KEY ?? "",
+    apiBaseUrl: process.env.JOZO_API_BASE_URL ?? "https://ec2.jozoidegas.ovh:8443/",
   },
 });

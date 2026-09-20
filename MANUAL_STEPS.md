@@ -50,6 +50,24 @@ Do **not** try to allowlist your phone's IP anywhere — carrier IPs rotate cons
 shared across thousands of subscribers via CGNAT, and change country to country while
 you're actually on a trip.
 
+## 5. Rebuild the website after the API URL change
+
+The backend URL is no longer hardcoded in `src/api/axiosConfig.js`. It now comes from:
+
+- `frontend/jozo-ide-gas/.env.development` -> `http://localhost:8080` (used by `npm start`)
+- `frontend/jozo-ide-gas/.env.production` -> the live URL (used by `npm run build`)
+
+The production value is identical to what was hardcoded, so nothing changes behaviourally,
+but Create React App bakes these in **at build time**: the site must be rebuilt and
+redeployed to pick the variable up. The `build/` folder committed in the repo is stale
+until you re-run `npm run build`.
+
+If the backend ever moves, edit `.env.production` rather than the source. Neither file is
+gitignored and neither holds a secret - only `.env*.local` is ignored, per CRA convention.
+
+The mobile app works the same way via `JOZO_API_BASE_URL`, which defaults to the live URL
+when unset, so you only need it to point a local build at your own machine.
+
 ---
 
 ## Verification after deploying

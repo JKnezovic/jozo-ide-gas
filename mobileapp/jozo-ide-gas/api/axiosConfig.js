@@ -8,7 +8,10 @@ if (!apiKey) {
   console.warn("No API key in this build - uploads, deletes and location updates will be rejected.");
 }
 
+// Override with JOZO_API_BASE_URL at build time to point a build at a local server.
+const baseURL = Constants.expoConfig?.extra?.apiBaseUrl;
+
 export default axios.create({
-  baseURL: "https://ec2.jozoidegas.ovh:8443/",
+  baseURL,
   headers: { "X-Api-Key": apiKey },
 });
