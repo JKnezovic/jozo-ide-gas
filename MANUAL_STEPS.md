@@ -11,13 +11,42 @@ The backend now rejects every write (`POST`/`PUT`/`PATCH`/`DELETE`) unless it ca
 matching `X-Api-Key` header. It **fails closed**: with no key configured, writes return
 `503` and log `API_KEY is not configured`.
 
-A key was generated into the local gitignored env file. Read it:
+A key was already generated into `backend/jozo-ide-gas/src/main/resources/.env`. Read it
+with:
 
 ```bash
 grep API_KEY backend/jozo-ide-gas/src/main/resources/.env
 ```
 
-Add that same `API_KEY = <value>` line to the `.env` on EC2, then restart the service.
+**There is nothing to edit on the server.** This project ships its secrets *inside* the jar:
+`.env` sits in `src/main/resources`, so Maven packages it to `BOOT-INF/classes/.env`, and
+dotenv falls back to the classpath when no `.env` exists on disk. That is why EC2 has no
+`.env` file next to the jar.
+
+So the key travels with the build:
+
+```bash
+cd backend/jozo-ide-gas
+./mvnw clean package -DskipTests
+# then copy target/jozo-ide-gas-0.0.1-SNAPSHOT.jar to EC2 and restart the service
+```
+
+Confirm the key made it in, before uploading:
+
+```bash
+unzip -p target/jozo-ide-gas-0.0.1-SNAPSHOT.jar BOOT-INF/classes/.env | grep API_KEY
+```
+
+Two consequences worth knowing. The jar carries live credentials, so it should not be
+shared or published anywhere. And a config change means a rebuild - there is no file on the
+server to edit.
+
+If you would rather set the key on the server instead, use a real environment variable in
+whatever starts the service (a systemd `Environment=API_KEY=...` line, or an export before
+`java -jar`). Spring reads OS environment variables too, and that sits alongside the jar's
+bundled values. Do **not** drop a partial `.env` next to the jar: dotenv reads one file
+only, so a filesystem `.env` replaces the bundled one wholesale and every other variable -
+Mongo, SSL - would go missing.
 
 ## 2. Put the same key in the Android build  — REQUIRED
 
