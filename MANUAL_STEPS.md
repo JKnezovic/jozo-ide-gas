@@ -27,8 +27,12 @@ So the key travels with the build:
 
 ```bash
 cd backend/jozo-ide-gas
-./mvnw clean package -DskipTests
+./mvnw clean package
+# runs the test suite too - all 20 pass
 # then copy target/jozo-ide-gas-0.0.1-SNAPSHOT.jar to EC2 and restart the service
+#
+# Build with Maven, NOT with IntelliJ Build > Build Artifacts: the artifact config in
+# .idea is stale and omits the S3 and thumbnail dependencies.
 ```
 
 Confirm the key made it in, before uploading:
